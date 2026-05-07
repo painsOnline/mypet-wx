@@ -49,6 +49,13 @@
 				"navigationBarTitleText": "商品详情",
 				"navigationBarTextStyle": "white"
 			}
+		},
+		{
+			"path": "pages/search/search",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
 		}
 	],
 	"globalStyle": {

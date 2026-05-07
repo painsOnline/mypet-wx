@@ -21,10 +21,10 @@ console.log('currentPage:', currentPage)
       <text class="logo-text">联系电话：15921680355</text>
     </view>
     <!-- 搜索条 -->
-    <view class="search">
+    <navigator url="/pages/search/search" open-type="navigate" animation-type="none" animation-duration="0" hover-class="none" class="search">
       <text class="icon-search">搜索商品</text>
       <text class="icon-scan"></text>
-    </view>
+    </navigator>
     <!-- 导航栏 -->
     <view class="pageNav">
       <navigator
