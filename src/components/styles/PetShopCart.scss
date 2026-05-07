@@ -1,0 +1,259 @@
+.productItem {
+  display: flex;
+  flex-direction: row;
+  border-bottom: #c8c8c8 1rpx solid;
+  padding: 20rpx 0;
+  margin: 0 20rpx;
+
+  // 最后一个 productItem 样式
+  &:last-child {
+    border: none !important;
+    margin: 0 20rpx 40rpx 20rpx;
+  }
+
+  .opCart {
+      display: flex;
+      flex-direction: row;
+      height: 36rpx;
+      float: right;
+    }
+
+    .product-control {
+      display: flex;
+      flex: 1;
+      justify-content: space-around;
+    }
+
+    .product-control img {
+      width: 36rpx;
+      height: 36rpx;
+    }
+
+    .cont {
+      width: 36rpx;
+      height: 36rpx;
+      text-align: center;
+    }
+
+    .buyNum {
+      margin: 0 10rpx;
+      width: 60rpx;
+      padding: 0 1rpx;
+      border: 1rpx solid #c8c7cc;
+      border-radius: 6rpx;
+      text-align: center;
+      vertical-align: middle;
+    }
+}
+
+.productItem .productImg {
+  width: 120rpx;
+  height: 120rpx;
+  margin: 10rpx 20rpx 0rpx 10rpx;
+}
+
+.productItem .productInfo {
+  padding: 0 10rpx 0 0;
+  width: 78%;
+}
+
+.productInfo .productName {
+  font-size: 26rpx;
+  color: #000;
+  margin-bottom: 10rpx;
+}
+
+.productInfo .productAttr {
+  font-size: 24rpx;
+  color: #c8c8c8;
+  margin-bottom: 15rpx;
+}
+
+.productInfo .productImportBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.productPrice {
+  width: 270rpx;
+}
+
+.productPrice .nowPrice {
+  font-size: 26rpx;
+  color: #fe3d2d;
+}
+
+.productPrice .oldPrice {
+  font-size: 22rpx;
+  color: #6a7076;
+  text-decoration: line-through;
+  margin-left: 20rpx;
+}
+
+.shopcart .cartBottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 130rpx;
+  z-index: 99;
+  display: flex;
+  background-color: #fff;
+}
+
+.priceBox {
+  padding-top: 10rpx;
+  color: #fe3d2d;
+}
+
+.price {
+  font-size: 36rpx;
+}
+
+.deliveryPrice {
+  color: #c8c8c8;
+  font-size: 24rpx;
+  padding-left: 10rpx;
+}
+
+.discount {
+  font-size: 24rpx;
+  text-decoration: line-through;
+  margin-left: 12rpx;
+}
+
+.carIcon {
+  flex: 1;
+}
+
+.iconBox {
+  position: absolute;
+  bottom: 22rpx;
+  left: 18rpx;
+  z-index: 101;
+  background-color: #ffe810;
+  border-radius: 50%;
+  height: 130rpx;
+  width: 130rpx;
+  line-height: 55rpx;
+}
+
+.iconBox .allcount {
+  position: absolute;
+  right: -6rpx;
+  top: 0;
+  display: inline-block;
+  padding: 0 2rpx;
+  font-size: 24rpx;
+  line-height: 40rpx;
+  font-weight: 400;
+  border-radius: 10rpx;
+  background-color: #f01414;
+  color: #ffffff;
+}
+
+.img {
+  font-size: 50rpx;
+  line-height: 50rpx;
+  width: 90rpx;
+  height: 90rpx;
+  padding-left: 20rpx;
+  padding-top: 20rpx;
+  color: #cccccc;
+  border-radius: 50%;
+}
+
+.carIcon .active {
+  background-color: #fee53f;
+}
+
+.middle {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  color: #ffffff;
+}
+
+.BtnRight {
+  flex: 1;
+  border-radius: 20rpx;
+  margin: 10rpx;
+  z-index: 99999;
+}
+
+.cartList {
+  position: fixed;
+  bottom: 130rpx;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  border-radius: 30rpx;
+}
+
+.cartList .title,
+.cartList .list-text {
+  display: flex;
+  flex-direction: row;
+}
+
+.cartList .title {
+  background: #f3f5f7;
+  justify-content: space-between;
+  padding: 20rpx;
+}
+
+.cartList .list-text {
+  padding: 10rpx 6rpx 10rpx 8rpx;
+  text-align: center;
+}
+
+.productList {
+  background: #f8f8f8;
+  padding-bottom: 10rpx;
+}
+
+.goToBuy {
+  background-color: #fee53f;
+  border-radius: 30rpx;
+}
+
+.listMask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 89;
+  opacity: 0.5;
+  background: #6a7076;
+}
+
+.clear {
+  color: #c8c8c8;
+  font-size: 24rpx;
+}
+
+/* 未登录禁用态 */
+.cartBottom.disabled {
+  background-color: #eee;
+
+  .priceBox,
+  .price {
+    color: #999;
+  }
+}
+
+.carIcon.disabled {
+  pointer-events: none;
+
+  .iconBox {
+    background-color: #ccc;
+  }
+}
+
+.goToBuy[disabled] {
+  background-color: #ccc;
+  color: #999;
+}

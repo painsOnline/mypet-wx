@@ -1,0 +1,107 @@
+{
+	// 组件自动引入规则
+	"easycom": {
+		// 是否开启自动扫描
+		"autoscan": true,
+		// 以正则方式自定义组件匹配规则
+		"custom": {
+			// uni-ui 规则如下配置
+			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
+			// 以 Pet 开头的组件，在 components 文件夹中查找引入（需要重启服务器）
+			"^Pet(.*)": "@/components/Pet$1.vue"
+		}
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/category/category",
+			"style": {
+				"navigationBarTitleText": "全部商品",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/my/my",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/product/product",
+			"style": {
+				"navigationBarTitleText": "商品详情",
+				"navigationBarTextStyle": "white"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "鑫钱猫",
+		"navigationBarBackgroundColor": "#FFE810",
+		"backgroundColor": "#FFE810"
+	},
+	"subPackages": [
+		{
+			"root": "pagesOrder",
+			"pages": [
+				{
+					"path": "detail/detail",
+					"style": {
+						"navigationBarTitleText": "订单详情",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
+					"path": "list/list",
+					"style": {
+						"navigationBarTitleText": "我的订单",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
+					"path": "create/create",
+					"style": {
+						"navigationBarTitleText": "订单创建",
+						"navigationBarTextStyle": "white"
+					}
+				}
+			]
+		},
+		{
+			"root": "pagesMember",
+			"pages": [
+				{
+					"path": "address/address",
+					"style": {
+						"navigationBarTitleText": "地址管理",
+						"navigationBarTextStyle": "white"
+					}
+				},
+				{
+					"path": "address-form/address-form",
+					"style": {
+						"navigationBarTitleText": "编辑地址",
+						"navigationBarTextStyle": "white"
+					}
+				}
+			]
+		}
+	]
+}

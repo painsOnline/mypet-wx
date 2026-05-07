@@ -1,0 +1,182 @@
+<script setup lang="ts">
+import {
+  getMemberOrderPreAPI,
+  getMemberOrderPreNowAPI,
+  getMemberOrderRepurchaseByIdAPI,
+  postMemberOrderAPI,
+} from '@/services/order'
+import { useAddressStore } from '@/stores/modules/address'
+import { useCartStore } from '@/stores'
+import type { OrderPreResult } from '@/types/order'
+import { onLoad } from '@dcloudio/uni-app'
+import { computed, ref } from 'vue'
+
+// 获取屏幕边界到安全区域距离
+const { safeAreaInsets } = uni.getSystemInfoSync()
+// 订单备注
+const buyerMessage = ref('')
+// 配送时间
+const deliveryList = ref([
+  { type: 1, text: '时间不限 (周一至周日)' },
+  { type: 2, text: '工作日送 (周一至周五)' },
+  { type: 3, text: '周末配送 (周六至周日)' },
+])
+// 当前配送时间下标
+const activeIndex = ref(0)
+// 当前配送时间
+const activeDelivery = computed(() => deliveryList.value[activeIndex.value])
+// 修改配送时间
+const onChangeDelivery: UniHelper.SelectorPickerOnChange = (ev) => {
+  activeIndex.value = ev.detail.value
+}
+
+// 页面参数
+const query = defineProps<{
+  skuId?: string
+  count?: string
+  orderId?: string
+}>()
+
+// 获取订单信息
+const orderPre = ref<OrderPreResult>()
+const getMemberOrderPreData = async () => {
+  if (query.count && query.skuId) {
+    const res = await getMemberOrderPreNowAPI({
+      count: query.count,
+      skuId: query.skuId,
+    })
+    orderPre.value = res.result
+  } else if (query.orderId) {
+    // 再次购买
+    const res = await getMemberOrderRepurchaseByIdAPI(query.orderId)
+    orderPre.value = res.result
+  } else {
+    const res = await getMemberOrderPreAPI()
+    orderPre.value = res.result
+  }
+}
+
+onLoad(() => {
+  getMemberOrderPreData()
+})
+
+const addressStore = useAddressStore()
+// 收货地址
+const selecteAddress = computed(() => {
+  return addressStore.selectedAddress || orderPre.value?.userAddresses.find((v) => v.isDefault)
+})
+
+// 提交订单
+const onOrderSubmit = async () => {
+  // 没有收货地址提醒
+  if (!selecteAddress.value?.id) {
+    return uni.showToast({ icon: 'none', title: '请选择收货地址' })
+  }
+  // 发送请求
+  const res = await postMemberOrderAPI({
+    addressId: selecteAddress.value?.id,
+    buyerMessage: buyerMessage.value,
+    deliveryTimeType: activeDelivery.value.type,
+    products: orderPre.value!.products.map((v) => ({ count: v.count, skuId: v.skuId })),
+    payChannel: 1,
+    payType: 1,
+  })
+  // 清空购物车
+  const cartStore = useCartStore()
+  cartStore.clearMemberLocalCart()
+  // 关闭当前页面，跳转到订单详情，传递订单id
+  uni.redirectTo({ url: `/pagesOrder/detail/detail?id=${res.result.id}` })
+}
+</script>
+
+<template>
+  <scroll-view enable-back-to-top scroll-y class="viewport">
+    <!-- 收货地址 -->
+    <navigator
+      v-if="selecteAddress"
+      class="shipment"
+      hover-class="none"
+      url="/pagesMember/address/address?from=order"
+    >
+      <view class="user"> {{ selecteAddress.receiver }} {{ selecteAddress.contact }} </view>
+      <view class="address"> {{ selecteAddress.fullLocation }} {{ selecteAddress.address }} </view>
+      <text class="icon icon-right"></text>
+    </navigator>
+    <navigator
+      v-else
+      class="shipment"
+      hover-class="none"
+      url="/pagesMember/address/address?from=order"
+    >
+      <view class="address"> 请选择收货地址 </view>
+      <text class="icon icon-right"></text>
+    </navigator>
+
+    <!-- 商品信息 -->
+    <view class="goods">
+      <navigator
+        v-for="item in orderPre?.products"
+        :key="item.skuId"
+        :url="`/pages/goods/goods?id=${item.id}`"
+        class="item"
+        hover-class="none"
+      >
+        <image class="picture" :src="item.picture" />
+        <view class="meta">
+          <view class="name ellipsis"> {{ item.name }} </view>
+          <view class="attrs">{{ item.attrsText }}</view>
+          <view class="prices">
+            <view class="pay-price symbol">{{ item.payPrice }}</view>
+            <view class="price symbol">{{ item.price }}</view>
+          </view>
+          <view class="count">x{{ item.count }}</view>
+        </view>
+      </navigator>
+    </view>
+
+    <!-- 配送及支付方式 -->
+    <view class="related">
+      <view class="item">
+        <text class="text">配送时间</text>
+        <picker :range="deliveryList" range-key="text" @change="onChangeDelivery">
+          <view class="icon-fonts picker">{{ activeDelivery.text }}</view>
+        </picker>
+      </view>
+      <view class="item">
+        <text class="text">订单备注</text>
+        <input
+          class="input"
+          :cursor-spacing="30"
+          placeholder="选题，建议留言前先与商家沟通确认"
+          v-model="buyerMessage"
+        />
+      </view>
+    </view>
+
+    <!-- 支付金额 -->
+    <view class="settlement">
+      <view class="item">
+        <text class="text">商品总价: </text>
+        <text class="number symbol">{{ orderPre?.summary.totalPrice.toFixed(2) }}</text>
+      </view>
+      <view class="item">
+        <text class="text">运费: </text>
+        <text class="number">免配送费</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 吸底工具栏 -->
+  <view class="toolbar" :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }">
+    <view class="total-pay symbol">
+      <text class="number">{{ orderPre?.summary.totalPayPrice.toFixed(2) }}</text>
+    </view>
+    <view class="button" :class="{ disabled: !selecteAddress?.id }" @tap="onOrderSubmit">
+      提交订单
+    </view>
+  </view>
+</template>
+
+<style lang="scss">
+@use './styles/create.scss';
+</style>

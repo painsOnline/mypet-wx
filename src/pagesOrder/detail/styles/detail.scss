@@ -1,0 +1,346 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.viewport {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f7f7f8;
+  font-size:28rpx;
+  line-height: 1;
+  padding-bottom: 30rpx;
+  background-size: cover;
+
+
+  .status::before {
+    margin-right: 6rpx;
+    font-weight: 500;
+  }
+
+  .tips {
+    margin: 30rpx 0;
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+
+    .money {
+      margin-right: 30rpx;
+    }
+  }
+
+  .button-group {
+    margin-top: 30rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .button {
+    width: 260rpx;
+    height: 64rpx;
+    margin: 0 10rpx;
+    text-align: center;
+    line-height: 64rpx;
+    border-radius: 68rpx;
+    background-color: #fff;
+  }
+}
+
+.shipment {
+  line-height: 1.4;
+  padding: 0 20rpx;
+  margin: 20rpx 20rpx 0;
+  border-radius: 10rpx;
+  background-color: #fff;
+
+  .status {
+    font-size: 36rpx;
+    color: black;
+    padding: 20rpx 0rpx 10rpx 10rpx;
+  }
+  .locate,
+  .item {
+    min-height: 120rpx;
+    padding: 30rpx 30rpx 25rpx 75rpx;
+    background-size: 50rpx;
+    background-repeat: no-repeat;
+    background-position: 6rpx center;
+  }
+
+  .locate {
+    background-image: url(https://pcapi-xiaotuxian-front-devtest.itheima.net/miniapp/images/locate.png);
+  }
+
+  .item {
+    background-image: url(https://pcapi-xiaotuxian-front-devtest.itheima.net/miniapp/images/car.png);
+    border-bottom: 1rpx solid #eee;
+    position: relative;
+  }
+}
+
+.goods {
+  margin: 20rpx 20rpx 0;
+  padding: 0 20rpx;
+  border-radius: 10rpx;
+  background-color: #fff;
+
+  .item {
+    padding: 30rpx 0;
+    border-bottom: 1rpx solid #eee;
+
+    .navigator {
+      display: flex;
+      margin: 20rpx 0;
+    }
+
+    .cover {
+      width: 170rpx;
+      height: 170rpx;
+      border-radius: 10rpx;
+      margin-right: 20rpx;
+    }
+
+    .meta {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .name {
+          padding-bottom: 10rpx;
+    }
+
+    .type {
+      line-height: 1.8;
+      padding:0 15rpx 10rpx 0;
+      margin-top: 6rpx;
+      align-self: flex-start;
+      border-radius: 4rpx;
+      background-color: #f7f7f8;
+      font-size:22rpx;
+    }
+
+    .price {
+      display: flex;
+      margin-top: 10rpx;
+    }
+
+    .original {
+      text-decoration: line-through;
+    }
+
+    .actual {
+    }
+
+    .text {
+      font-size: 22rpx;
+    }
+
+    .quantity {
+      position: absolute;
+      bottom: 6rpx;
+      right: 0;
+      font-size: 24rpx;
+    }
+
+    .action {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-start;
+      padding: 30rpx 0 0;
+
+      .button {
+        width: 200rpx;
+        height: 60rpx;
+        text-align: center;
+        justify-content: center;
+        line-height: 60rpx;
+        margin-left: 20rpx;
+        border-radius: 60rpx;
+        border: 1rpx solid #ccc;
+      }
+
+      .primary {
+        border-color: #FBE950;
+      }
+    }
+  }
+
+  .total {
+    line-height: 1;
+    padding: 20rpx 0;
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20rpx 0 0 0;
+    }
+
+    .symbol::before {
+      content: '¥';
+      font-size: 80%;
+      margin-right: 3rpx;
+    }
+
+    .primary {
+      color: #cf4444;
+      font-size: 36rpx;
+    }
+  }
+}
+
+.detail {
+  line-height: 1;
+  padding: 30rpx 20rpx 0;
+  margin: 20rpx 20rpx 0;
+  border-radius: 10rpx;
+  background-color: #fff;
+
+  .title {
+    font-size: 30rpx;
+  }
+
+  .row {
+    padding: 20rpx 0;
+
+    .item {
+      padding: 10rpx 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .copy {
+      border-radius: 20rpx;
+      font-size: 20rpx;
+      border: 1px solid #ccc;
+      padding: 5rpx 10rpx;
+      margin-left: 10rpx;
+    }
+  }
+}
+
+.toolbar-height {
+  height: 100rpx;
+  box-sizing: content-box;
+}
+
+.toolbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--window-bottom));
+  z-index: 1;
+
+  height: 100rpx;
+  padding: 0 20rpx;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  border-top: 1rpx solid #ededed;
+  border-bottom: 1rpx solid #ededed;
+  background-color: #fff;
+  box-sizing: content-box;
+
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FBE950;
+    width: 200rpx;
+    height: 72rpx;
+    margin-left: 15rpx;
+    font-size: 26rpx;
+    border-radius: 72rpx;
+    border: 1rpx solid #ccc;
+  }
+
+  .delete {
+    order: 4;
+    color: #cf4444;
+  }
+
+  .button {
+    order: 3;
+  }
+
+  .secondary {
+    order: 2;
+    border-color: #FBE950;
+  }
+
+  .primary {
+    order: 1;
+    color: black;
+    background-color: #FBE950;
+  }
+}
+
+.popup-root {
+  padding: 30rpx 30rpx 0;
+  border-radius: 10rpx 10rpx 0 0;
+  overflow: hidden;
+
+  .title {
+    font-size: 30rpx;
+    text-align: center;
+    margin-bottom: 30rpx;
+  }
+
+  .description {
+    font-size: 28rpx;
+    padding: 0 20rpx;
+
+    .tips {
+      margin-bottom: 12rpx;
+    }
+
+    .cell {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15rpx 0;
+    }
+
+    .icon::before {
+      content: '\e6cd';
+      font-family: 'erabbit' !important;
+      font-size: 38rpx;
+    }
+
+    .icon.checked::before {
+      content: '\e6cc';
+      font-size: 38rpx;
+      color: #27ba9b;
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 30rpx 0 40rpx;
+    font-size: 28rpx;
+
+    .button {
+      flex: 1;
+      height: 72rpx;
+      text-align: center;
+      line-height: 72rpx;
+      margin: 0 20rpx;
+      border-radius: 72rpx;
+      border: 1rpx solid #ccc;
+    }
+
+    .primary {
+      color: black;
+      background-color: #FBE950;
+      border: none;
+    }
+  }
+}
