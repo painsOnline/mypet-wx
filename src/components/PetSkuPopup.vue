@@ -5,12 +5,15 @@
     :mode="mode"
     :localdata="selectedProduct"
     add-cart-background-color="#353638"
+    add-cart-color="#fff"
     buy-now-background-color="#FEE53F"
+    buy-now-color="#333"
+    buy-now-text-color="#333"
     ref="skuPopupRef"
     :actived-style="{
-      color: '#27BA9B',
-      borderColor: '#27BA9B',
-      backgroundColor: '#E9F8F5',
+      color: '#FF8833',
+      borderColor: '#FF8833',
+      backgroundColor: '#FFF0E5',
     }"
     @add-cart="onAddCart"
     @buy-now="onBuyNow"
@@ -126,3 +129,9 @@ defineExpose({
   selectArr
 })
 </script>
+
+<style lang="scss" scoped>
+:deep(.sure) {
+  color: #333 !important;
+}
+</style>

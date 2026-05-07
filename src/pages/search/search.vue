@@ -14,7 +14,7 @@
       <!-- 搜索栏 -->
       <view class="search-bar">
         <view class="search-input-wrap">
-          <text class="search-icon">🔍</text>
+          <text class="search-icon"></text>
           <input
             class="search-input"
             v-model="keyword"
@@ -211,7 +211,25 @@ function goBack() { uni.navigateBack() }
   border-radius: 32rpx;
   padding: 0 20rpx;
 }
-.search-icon { font-size: 28rpx; margin-right: 10rpx; }
+.search-icon {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 12rpx;
+  border: 3rpx solid #999;
+  border-radius: 50%;
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    right: -4rpx;
+    bottom: -4rpx;
+    width: 8rpx;
+    height: 3rpx;
+    background: #999;
+    border-radius: 2rpx;
+    transform: rotate(45deg);
+  }
+}
 .search-input { flex: 1; font-size: 28rpx; }
 .clear-btn { font-size: 28rpx; color: #999; padding: 0 10rpx; }
 .cancel-btn { font-size: 28rpx; color: #333; }
@@ -280,11 +298,18 @@ function goBack() { uni.navigateBack() }
   align-items: center;
   margin-top: 12rpx;
 }
-.now-price { font-size: 28rpx; color: #cf4444; font-weight: 600; }
+.now-price { font-size: 28rpx; color: #E03131; font-weight: 600; }
 .old-price { font-size: 22rpx; color: #999; text-decoration: line-through; margin-left: 10rpx; flex: 1; }
-.add-btn image {
+.add-btn {
   width: 44rpx;
   height: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  image {
+    width: 36rpx;
+    height: 36rpx;
+  }
 }
 .loading-text {
   text-align: center;

@@ -16,6 +16,7 @@
       flex-direction: row;
       height: 36rpx;
       float: right;
+      width: 140rpx;
     }
 
     .product-control {
@@ -97,7 +98,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 130rpx;
+  height: 120rpx;
   z-index: 99;
   display: flex;
   background-color: #fff;
@@ -130,13 +131,13 @@
 
 .iconBox {
   position: absolute;
-  bottom: 22rpx;
+  bottom: 18rpx;
   left: 18rpx;
   z-index: 101;
   background-color: #ffe810;
   border-radius: 50%;
-  height: 130rpx;
-  width: 130rpx;
+  height: 120rpx;
+  width: 120rpx;
   line-height: 55rpx;
 }
 
@@ -159,8 +160,8 @@
   line-height: 50rpx;
   width: 90rpx;
   height: 90rpx;
-  padding-left: 20rpx;
-  padding-top: 20rpx;
+  padding-left: 10rpx;
+  padding-top: 10rpx;
   color: #cccccc;
   border-radius: 50%;
 }
@@ -185,7 +186,7 @@
 
 .cartList {
   position: fixed;
-  bottom: 130rpx;
+  bottom: 120rpx;
   left: 0;
   right: 0;
   z-index: 90;
@@ -228,6 +229,7 @@
   z-index: 89;
   opacity: 0.5;
   background: #6a7076;
+  transition: opacity 0.35s ease;
 }
 
 .clear {
@@ -256,4 +258,18 @@
 .goToBuy[disabled] {
   background-color: #ccc;
   color: #999;
+}
+
+/* 购物车抽屉动画 */
+.cart-slide-enter-active {
+  transition: all 0.35s ease-out;
+}
+.cart-slide-leave-active {
+  transition: all 0.35s ease-in;
+}
+.cart-slide-enter-from {
+  transform: translateY(100%);
+}
+.cart-slide-leave-to {
+  transform: translateY(100%);
 }

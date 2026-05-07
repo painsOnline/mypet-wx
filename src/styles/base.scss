@@ -1,3 +1,5 @@
+@use './variables.scss' as *;
+
 view,
 navigator,
 input,
@@ -29,4 +31,37 @@ image {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+// 单行省略
+.ellipsis-1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 价格高亮
+.price-red {
+  color: $price-red;
+  font-weight: 600;
+}
+
+// 主按钮
+.btn-primary {
+  background: $navbar-gradient;
+  color: #fff;
+  border-radius: $radius-round;
+  font-size: $font-subtitle;
+  font-weight: 500;
+  padding: $spacing-sm $spacing-xl;
+  text-align: center;
+}
+
+// 卡片面板
+.panel-card {
+  background: $bg-white;
+  border-radius: $radius-md;
+  margin: $spacing-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
 }

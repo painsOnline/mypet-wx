@@ -167,7 +167,7 @@ page {
       }
 
       .primary {
-        border-color: #FBE950;
+        border-color: #FF8833;
       }
     }
   }
@@ -252,7 +252,7 @@ page {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #FBE950;
+    background-color: #FF8833;
     width: 200rpx;
     height: 72rpx;
     margin-left: 15rpx;
@@ -272,13 +272,13 @@ page {
 
   .secondary {
     order: 2;
-    border-color: #FBE950;
+    border-color: #FF8833;
   }
 
   .primary {
     order: 1;
     color: black;
-    background-color: #FBE950;
+    background-color: #FF8833;
   }
 }
 
@@ -317,7 +317,7 @@ page {
     .icon.checked::before {
       content: '\e6cc';
       font-size: 38rpx;
-      color: #27ba9b;
+      color: #FF8833;
     }
   }
 
@@ -338,8 +338,8 @@ page {
     }
 
     .primary {
-      color: black;
-      background-color: #FBE950;
+      color: #fff;
+      background-color: #FF8833;
       border: none;
     }
   }

@@ -1,0 +1,66 @@
+// ========================================
+// PetMart 社区宠物团购 设计系统变量
+// 橘黄温馨风格 · 萌宠主题
+// ========================================
+
+// --- 品牌色 ---
+$primary: #FF8833;           // 主色 - 温暖橙
+$primary-light: #FFF0E5;    // 浅橙背景
+$primary-dark: #E6731A;     // 深橙（按钮悬停）
+$secondary: #FFB84D;        // 辅助色 - 金黄
+$accent: #4DABF7;           // 点缀色 - 天空蓝
+
+// --- 功能色 ---
+$price-red: #E03131;        // 价格红
+$success: #40C057;          // 成功绿
+$warning: #FD7E14;          // 警告橙
+$danger: #E03131;           // 危险红
+$info: #4DABF7;             // 信息蓝
+
+// --- 文字色 ---
+$text-primary: #1A1A1A;     // 主要文字
+$text-secondary: #666666;   // 次要文字
+$text-hint: #999999;        // 提示文字
+$text-disabled: #CCCCCC;    // 禁用文字
+
+// --- 背景色 ---
+$bg-page: #F5F5F5;          // 页面背景
+$bg-white: #FFFFFF;         // 卡片白色
+$bg-striped: #FAFAFA;       // 条纹背景
+
+// --- 边框 ---
+$border-color: #EEEEEE;     // 默认边框
+$border-light: #F5F5F5;     // 浅边框
+
+// --- 导航栏渐变 ---
+$navbar-gradient: linear-gradient(135deg, #FF8833, #FFB84D);
+
+// --- 圆角 ---
+$radius-sm: 8rpx;
+$radius-md: 12rpx;
+$radius-lg: 16rpx;
+$radius-round: 32rpx;
+
+// --- 字号 ---
+$font-hint: 22rpx;
+$font-body: 26rpx;
+$font-subtitle: 28rpx;
+$font-title: 32rpx;
+$font-large: 36rpx;
+$font-xl: 40rpx;
+
+// --- 间距 ---
+$spacing-xs: 8rpx;
+$spacing-sm: 12rpx;
+$spacing-md: 16rpx;
+$spacing-lg: 20rpx;
+$spacing-xl: 24rpx;
+$spacing-xxl: 32rpx;
+
+// --- 阴影 ---
+$shadow-card: 0 2rpx 12rpx rgba(0,0,0,0.04);
+$shadow-float: 0 4rpx 20rpx rgba(0,0,0,0.08);
+
+// --- 过渡 ---
+$transition-fast: 0.15s ease;
+$transition-normal: 0.25s ease;

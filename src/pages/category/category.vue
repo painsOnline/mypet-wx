@@ -40,16 +40,10 @@
                 <view class="productImportBox">
                   <view class="productPrice">
                     <text class="nowPrice">优惠价￥{{product.price}}</text>
-                  </view>
-                  <view>
                     <text class="oldPrice">￥{{product.oldPrice}}</text>
-                    <view class="opCart" @click.stop="onOpenSkuPopup(product)">
-                      <view class="product-control">
-                        <view class="cont">
-                          <image src="/static/tabs/add-now.png" />
-                        </view>
-                      </view>
-                    </view>
+                  </view>
+                  <view class="opCart" @click.stop="onOpenSkuPopup(product)">
+                    <image src="/static/tabs/add-now.png" style="width:36rpx;height:36rpx" />
                   </view>
                 </view>
               </view>

@@ -59,10 +59,10 @@
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "鑫钱猫",
-		"navigationBarBackgroundColor": "#FFE810",
-		"backgroundColor": "#FFE810"
+		"navigationBarBackgroundColor": "#FF8833",
+		"backgroundColor": "#F5F5F5"
 	},
 	"subPackages": [
 		{

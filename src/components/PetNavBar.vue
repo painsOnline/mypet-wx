@@ -44,8 +44,53 @@ console.log('currentPage:', currentPage)
 <style lang="scss">
 /* 自定义导航条 */
 .navbar {
-  // background-image: url(@/static/images/navigator_bg.png);
-  background-color: #FFE810;
+  background:
+    radial-gradient(ellipse 18rpx 22rpx at 12% 72%, rgba(255,255,255,0.22), transparent),
+    radial-gradient(ellipse 7rpx 9rpx at 7% 62%, rgba(255,255,255,0.2), transparent),
+      radial-gradient(ellipse 7rpx 9rpx at 12% 57%, rgba(255,255,255,0.2), transparent),
+      radial-gradient(ellipse 7rpx 9rpx at 17% 60%, rgba(255,255,255,0.18), transparent),
+      /* 猫爪2 */
+      radial-gradient(ellipse 16rpx 20rpx at 82% 55%, rgba(255,255,255,0.22), transparent),
+      radial-gradient(ellipse 6rpx 8rpx at 77% 46%, rgba(255,255,255,0.2), transparent),
+      radial-gradient(ellipse 6rpx 8rpx at 82% 42%, rgba(255,255,255,0.2), transparent),
+      radial-gradient(ellipse 6rpx 8rpx at 87% 44%, rgba(255,255,255,0.18), transparent),
+      /* 猫爪3 */
+      radial-gradient(ellipse 14rpx 18rpx at 65% 18%, rgba(255,255,255,0.2), transparent),
+      radial-gradient(ellipse 6rpx 7rpx at 59% 12%, rgba(255,255,255,0.18), transparent),
+      radial-gradient(ellipse 6rpx 7rpx at 65% 8%, rgba(255,255,255,0.18), transparent),
+      radial-gradient(ellipse 6rpx 7rpx at 71% 11%, rgba(255,255,255,0.16), transparent),
+      /* 猫爪4 */
+      radial-gradient(ellipse 20rpx 24rpx at 28% 42%, rgba(255,255,255,0.2), transparent),
+      radial-gradient(ellipse 7rpx 9rpx at 24% 33%, rgba(255,255,255,0.18), transparent),
+      radial-gradient(ellipse 7rpx 9rpx at 30% 28%, rgba(255,255,255,0.18), transparent),
+      radial-gradient(ellipse 7rpx 9rpx at 35% 31%, rgba(255,255,255,0.16), transparent),
+      radial-gradient(circle at 8% 20%, rgba(255,255,255,0.25) 7rpx, transparent 7rpx),
+    radial-gradient(circle at 15% 16%, rgba(255,255,255,0.25) 7rpx, transparent 7rpx),
+    radial-gradient(circle at 20% 22%, rgba(255,255,255,0.2) 6rpx, transparent 6rpx),
+    radial-gradient(ellipse 60rpx 35rpx at 30% 75%, rgba(255,255,255,0.05), transparent),
+    radial-gradient(circle at 72% 54%, rgba(255,255,255,0.04), transparent),
+    radial-gradient(circle at 79% 50%, rgba(255,255,255,0.04), transparent),
+    radial-gradient(circle at 84% 56%, rgba(255,255,255,0.18) 5rpx, transparent 5rpx),
+    radial-gradient(circle at 88% 28%, rgba(255,255,255,0.28) 12rpx, transparent 12rpx),
+    radial-gradient(circle at 83% 20%, rgba(255,255,255,0.2) 5rpx, transparent 5rpx),
+    radial-gradient(circle at 89% 16%, rgba(255,255,255,0.2) 5rpx, transparent 5rpx),
+    radial-gradient(circle at 35% 82%, rgba(255,255,255,0.26) 12rpx, transparent 12rpx),
+    radial-gradient(circle at 30% 74%, rgba(255,255,255,0.18) 5rpx, transparent 5rpx),
+    radial-gradient(circle at 36% 72%, rgba(255,255,255,0.18) 5rpx, transparent 5rpx),
+    radial-gradient(circle at 60% 18%, rgba(255,255,255,0.2) 9rpx, transparent 9rpx),
+    radial-gradient(circle at 48% 48%, rgba(255,255,255,0.18) 11rpx, transparent 11rpx),
+    radial-gradient(circle at 75% 60%, rgba(255,255,255,0.22) 6rpx, transparent 12rpx),
+    radial-gradient(circle at 85% 20%, rgba(255,255,255,0.25) 9rpx, transparent 6rpx),
+    radial-gradient(circle at 30% 80%, rgba(255,255,255,0.22) 14rpx, transparent 10rpx),
+    radial-gradient(circle at 55% 40%, rgba(255,255,255,0.25) 12rpx, transparent 7rpx),
+    radial-gradient(circle at 10% 55%, rgba(255,255,255,0.16) 9rpx, transparent 9rpx),
+    radial-gradient(circle at 65% 75%, rgba(255,255,255,0.11) 5rpx, transparent 5rpx),
+    radial-gradient(circle at 90% 45%, rgba(255,255,255,0.13) 11rpx, transparent 11rpx),
+    radial-gradient(circle at 45% 15%, rgba(255,255,255,0.17) 6rpx, transparent 6rpx),
+    radial-gradient(ellipse 40rpx 28rpx at 20% 70%, rgba(255,255,255,0.08), transparent),
+    radial-gradient(ellipse 32rpx 22rpx at 80% 35%, rgba(255,255,255,0.07), transparent),
+    radial-gradient(ellipse 36rpx 26rpx at 50% 90%, rgba(255,255,255,0.06), transparent),
+    linear-gradient(135deg, #FF8833 0%, #FFB84D 100%);
   background-size: cover;
   position: relative;
   display: flex;
@@ -118,7 +163,7 @@ console.log('currentPage:', currentPage)
       width: 100%;
       height: 8rpx;
       border-radius: 3rpx;
-      background-color: #FEE53F;
+      background-color: #FF8833;
     }
   }
 }

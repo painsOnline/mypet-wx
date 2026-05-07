@@ -230,6 +230,7 @@ defineExpose({ addCart, toggleVisible })
     </view>
 
     <!-- 选择的商品 -->
+    <Transition name="cart-slide">
     <view class="cartList" v-show="isLoggedIn && isShowList && productList.length">
       <view class="title">
         <text>购物车</text>
@@ -271,6 +272,7 @@ defineExpose({ addCart, toggleVisible })
       </scroll-view>
     </view>
     <view class="listMask" v-show="isLoggedIn && isShowList && productList.length" @click="onMaskClick" />
+    </Transition>
   </view>
 </template>
 

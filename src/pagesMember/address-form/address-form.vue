@@ -237,7 +237,7 @@ const onCityChange = (ev: any) => {
       <switch
         @change="onSwitchChange"
         class="switch"
-        color="#27ba9b"
+        color="#FF8833"
         :checked="form.isDefault === 1"
       />
     </view>

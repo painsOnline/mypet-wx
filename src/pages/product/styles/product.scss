@@ -85,15 +85,21 @@ page {
     border-bottom: 1rpx solid #eaeaea;
     .price {
       padding: 25rpx 20rpx;
-      color: red;
-      font-size: 34rpx;
       box-sizing: border-box;
-      background-color: #35c8a9;
-    }
-
-    .old_price{
-      text-decoration: line-through;
-      color: #a64141;
+      background: #fff;
+      .now_price {
+        font-size: 34rpx;
+        color: #E03131;
+        font-weight: 700;
+        .symbol { font-size: 26rpx; }
+        .number { font-size: 48rpx; }
+      }
+      .old_price {
+        font-size: 24rpx;
+        color: #999;
+        text-decoration: line-through;
+        margin-top: 6rpx;
+      }
     }
 
     .number {
@@ -252,7 +258,8 @@ page {
       background-color: #353638;
     }
     .payment {
-      background-color: #fee53f;
+      background-color: #FEE53F;
+      color: #333;
       margin-left: 20rpx;
     }
   }

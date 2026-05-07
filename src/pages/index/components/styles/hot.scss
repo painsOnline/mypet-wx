@@ -5,20 +5,33 @@
     min-height: 508rpx;
     padding-bottom: 120rpx;
     margin: 20rpx 20rpx 0;
-    border-radius: 10rpx;
+    border-radius: 12rpx;
     background-color: #fff;
-  
+    box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+
   .title {
+    width: 100%;
     height: 60rpx;
     line-height: 60rpx;
+    padding: 0 20rpx;
+    font-size: 30rpx;
+    font-weight: 600;
     color: #333;
-    font-size: 28rpx;
-    border-bottom: 1rpx solid #f7f7f8;
-    .more {
-      float: right;
-      padding-left: 20rpx;
-      font-size: 24rpx;
-      color: #999;
+    border-bottom: 1rpx solid #f0f0f0;
+    .hot-name {
+      position: relative;
+      padding-left: 16rpx;
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 6rpx;
+        height: 28rpx;
+        border-radius: 3rpx;
+        background: linear-gradient(180deg, #FF8833, #FFB84D);
+      }
     }
   }
   .more {
@@ -31,62 +44,59 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    padding: 20rpx 0;
+    padding: 16rpx 10rpx;
+    justify-content: space-between;
     .product {
-      width: 220rpx;
-      margin: 0rpx 25rpx 40rpx 0;
-      &:nth-child(3n) {
-        margin-right: 0;
-      }
+      width: calc((100% - 16rpx) / 3);
+      margin-bottom: 24rpx;
       .image {
-        width: 200rpx;
-        height: 200rpx;
-      }
-      .hot-name {
-        padding: 5rpx;
-        font-size: 28rpx;
-        color: #333;
+        width: 100%;
+        height: 210rpx;
+        border-radius: 8rpx;
       }
       .name {
-        margin: 10rpx 5rpx;
+        margin: 8rpx 5rpx;
         font-size: 24rpx;
         color: #333;
+        line-height: 1.3;
       }
       .price {
         padding: 5rpx;
-        font-size: 24rpx;
-        color: #cf4444;
+        font-size: 26rpx;
+        color: #E03131;
+        font-weight: 600;
+        .number { font-size: 26rpx; }
       }
       .odPrice {
-        font-size: 24rpx;
-		    color: #6a7076;
-		    /* 中间划线 */
-		    text-decoration: line-through;
-        font-size: 18rpx;
+        font-size: 20rpx;
+        color: #999;
+        text-decoration: line-through;
         float: left;
-        margin: 10rpx 0 0 0;
+        margin: 8rpx 0 0 5rpx;
       }
-      .number {
-        font-size: 24rpx;
-        margin-left: 2rpx;
-      }
-
       .price-and-cart{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
-
       .opCart {
         display: flex;
         flex-direction: row;
-        height: 36rpx;
+        height: 44rpx;
+        width: 44rpx;
         float: right;
+        align-items: center;
+        justify-content: center;
+        image {
+          width: 36rpx;
+          height: 36rpx;
+        }
       }
-
       .product-control {
         display: flex;
         flex: 1;
         justify-content: space-around;
       }
-
       .cont {
         height: 36rpx;
         width: 36rpx;
