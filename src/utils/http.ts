@@ -3,17 +3,18 @@
  *   拦截 request 请求
  *   拦截 uploadFile 文件上传
  *
- * TODO:
- *   1. 非 http 开头需拼接地址
- *   2. 请求超时
- *   3. 添加小程序端请求头标识
- *   4. 添加 token 请求头标识
+ * 1. 非 http 开头需拼接地址（开发环境拼接本地后端，生产环境使用配置地址）
+ * 2. 请求超时 60s
+ * 3. 添加小程序端请求头标识 source-client: miniapp
+ * 4. 添加 JWT token 请求头标识
+ * 5. 租户信息通过 header Tenant 传递
  */
 
 import { useMemberStore } from '@/stores'
 import type { DataResult } from '@/types/global'
 
-const baseURL = 'https://pcapi-xiaotuxian-front-devtest.itheima.net'
+// Vite 环境变量：开发环境 localhost:8080，生产环境 api.mypet.com
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
 // 添加拦截器
 const httpInterceptor = {
@@ -24,17 +25,18 @@ const httpInterceptor = {
       options.url = baseURL + options.url
     }
     // 2. 请求超时, 默认 60s
-    options.timeout = 10000
-    // 3. 添加小程序端请求头标识
+    options.timeout = 60000
+    // 3. 添加小程序端请求头标识 + 租户信息
+    const memberStore = useMemberStore()
     options.header = {
       ...options.header,
       'source-client': 'miniapp',
+      Tenant: 'xlong',
     }
     // 4. 添加 token 请求头标识
-    const memberStore = useMemberStore()
     const token = memberStore.profile?.token
     if (token) {
-      options.header.Authorization = token
+      options.header.Authorization = 'Bearer ' + token
     }
   },
 }
@@ -46,34 +48,22 @@ uni.addInterceptor('uploadFile', httpInterceptor)
  * @param  UniApp.RequestOptions
  * @returns Promise
  *  1. 返回 Promise 对象
- *  2. 获取数据成功
- *    2.1 提取核心数据 res.data
- *    2.2 添加类型，支持泛型
- *  3. 获取数据失败
- *    3.1 401错误  -> 清理用户信息，跳转到登录页
- *    3.2 其他错误 -> 根据后端错误信息轻提示
- *    3.3 网络错误 -> 提示用户换网络
+ *  2. 获取数据成功 → 提取核心数据 res.data
+ *  3. 获取数据失败 → 401 清理 token 跳登录 / 其他错误轻提示 / 网络错误提示
  */
-// 2.2 添加类型，支持泛型
 export const http = <T>(options: UniApp.RequestOptions) => {
-  // 1. 返回 Promise 对象
   return new Promise<DataResult<T>>((resolve, reject) => {
     uni.request({
       ...options,
-      // 响应成功
       success(res) {
-        // 状态码 2xx， axios 就是这样设计的
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          // 2.1 提取核心数据 res.data
           resolve(res.data as DataResult<T>)
         } else if (res.statusCode === 401) {
-          // 401错误  -> 清理用户信息，跳转到登录页
           const memberStore = useMemberStore()
           memberStore.clearProfile()
           uni.navigateTo({ url: '/pages/login/login' })
           reject(res)
         } else {
-          // 其他错误 -> 根据后端错误信息轻提示
           uni.showToast({
             icon: 'none',
             title: (res.data as DataResult<T>).msg || '请求错误',
@@ -81,7 +71,6 @@ export const http = <T>(options: UniApp.RequestOptions) => {
           reject(res)
         }
       },
-      // 响应失败
       fail(err) {
         uni.showToast({
           icon: 'none',
@@ -93,13 +82,9 @@ export const http = <T>(options: UniApp.RequestOptions) => {
   })
 }
 
-/* 
-模拟DataResult 结果
+/*
+模拟DataResult 结果（保留用于未实现接口的降级）
 */
-export const mockDataResult = <T>(code: string, msg: string, result: T) : DataResult<T> => {
-  return {
-    code: code,
-    msg: msg,
-    result: result
-  }
+export const mockDataResult = <T>(code: string, msg: string, result: T): DataResult<T> => {
+  return { code, msg, result }
 }

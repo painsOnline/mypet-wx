@@ -1,3 +1,5 @@
+import {ProductItem} from './global'
+
 /** 商品信息 */
 export type ProductDetail = {
   /** id */
@@ -20,6 +22,22 @@ export type ProductDetail = {
   skus: SkuItem[]
   /** 可选规格集合备注[ 可选规格信息 ] */
   specs: SpecItem[]
+}
+
+/** 商品详情: 包含详情属性 + 详情图片 */
+export type Details = {
+  /** 商品规格集合[ 展示类规格 ] */
+  properties: DetailsPropertyItem[]
+  /** 商品详情 */
+  detail: string
+}
+
+/** 属性信息 */
+export type DetailsPropertyItem = {
+  /** 属性名称 */
+  name: string
+  /** 属性值 */
+  value: string
 }
 
 /** sku信息 */

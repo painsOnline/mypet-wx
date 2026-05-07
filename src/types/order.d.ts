@@ -1,5 +1,6 @@
 import { OrderState } from "./../enums/order"
 import { PageParams, PageResult } from "./global"
+import {AddressItem} from './address'
 
 /** 订单列表 */
 export type OrderList = {
@@ -111,10 +112,10 @@ export type OrderPreProduct = {
 export type OrderCreateParams = {
   /** 所选地址Id */
   addressId: string
-  /** 配送时间类型，1为不限，2为工作日，3为双休或假日 */
-  deliveryTimeType: number
+  /** 配送时间，不限、工作日、双休或假日 */
+  deliveryTime?: string
   /** 订单备注 */
-  buyerMessage: string
+  buyerMessage?: string
   /** 商品集合[ 商品信息 ] */
   products: {
     /** 数量 */
@@ -122,10 +123,10 @@ export type OrderCreateParams = {
     /** skuId */
     skuId: string
   }[]
-  /** 支付渠道：支付渠道，1为货到付款 */
-  payChannel: 1
+  /** 支付渠道：1为货到付款 */
+  payChannel?: number
   /** 支付方式，1为货到付款 */
-  payType: 1
+  payType?: number
 }
 
 /** 提交订单 返回信息 */

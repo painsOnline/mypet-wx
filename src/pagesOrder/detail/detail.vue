@@ -85,14 +85,6 @@
         </template>
         <!-- 其他订单状态:按需展示按钮 -->
         <template v-else>
-          <navigator
-            class="button secondary"
-            :url="`/pagesOrder/create/create?orderId=${query.id}`"
-            hover-class="none"
-            v-if="order.orderState === OrderState.Completed"
-          >
-            再次购买
-          </navigator>
           <!-- 配送中状态: 展示确认收货 -->
           <view
             class="button primary"

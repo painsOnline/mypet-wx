@@ -63,6 +63,21 @@ const selectArrText = computed(() => {
   return skuPopRef.value?.selectArr?.join(' ').trim() || '请选择商品规格'
 })
 
+// 处理商品详情HTML，使图片和文本适配小程序宽度
+const detailHtml = computed(() => {
+  let html = product.value?.details?.detail || ''
+  if (!html) return ''
+  // 移除 img 标签固定的宽高属性，添加自适应样式
+  html = html.replace(/<img[^>]*>/g, (match) => {
+    return match
+      .replace(/width="[^"]*"/g, '')
+      .replace(/height="[^"]*"/g, '')
+      .replace(/style="[^"]*"/g, '')
+      .replace('<img ', '<img style="max-width:100%;height:auto;display:block" ')
+  })
+  return `<div style="width:100%;overflow:hidden;word-break:break-all">${html}</div>`
+})
+
 </script>
 
 <template>
@@ -125,6 +140,12 @@ const selectArrText = computed(() => {
           mode="widthFix"
           :src="item"
         ></image>
+        <!-- 商品详情HTML -->
+        <rich-text
+          v-if="detailHtml"
+          :nodes="detailHtml"
+          class="detail-html"
+        />
       </view>
     </view>
   </scroll-view>

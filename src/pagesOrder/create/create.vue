@@ -2,7 +2,6 @@
 import {
   getMemberOrderPreAPI,
   getMemberOrderPreNowAPI,
-  getMemberOrderRepurchaseByIdAPI,
   postMemberOrderAPI,
 } from '@/services/order'
 import { useAddressStore } from '@/stores/modules/address'
@@ -17,14 +16,12 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
 const buyerMessage = ref('')
 // 配送时间
 const deliveryList = ref([
-  { type: 1, text: '时间不限 (周一至周日)' },
-  { type: 2, text: '工作日送 (周一至周五)' },
-  { type: 3, text: '周末配送 (周六至周日)' },
+  '时间不限 (周一至周日)',
+  '工作日送 (周一至周五)',
+  '周末配送 (周六至周日)',
 ])
 // 当前配送时间下标
 const activeIndex = ref(0)
-// 当前配送时间
-const activeDelivery = computed(() => deliveryList.value[activeIndex.value])
 // 修改配送时间
 const onChangeDelivery: UniHelper.SelectorPickerOnChange = (ev) => {
   activeIndex.value = ev.detail.value
@@ -45,10 +42,6 @@ const getMemberOrderPreData = async () => {
       count: query.count,
       skuId: query.skuId,
     })
-    orderPre.value = res.result
-  } else if (query.orderId) {
-    // 再次购买
-    const res = await getMemberOrderRepurchaseByIdAPI(query.orderId)
     orderPre.value = res.result
   } else {
     const res = await getMemberOrderPreAPI()
@@ -76,7 +69,7 @@ const onOrderSubmit = async () => {
   const res = await postMemberOrderAPI({
     addressId: selecteAddress.value?.id,
     buyerMessage: buyerMessage.value,
-    deliveryTimeType: activeDelivery.value.type,
+    deliveryTime: deliveryList.value[activeIndex.value],
     products: orderPre.value!.products.map((v) => ({ count: v.count, skuId: v.skuId })),
     payChannel: 1,
     payType: 1,
@@ -138,8 +131,8 @@ const onOrderSubmit = async () => {
     <view class="related">
       <view class="item">
         <text class="text">配送时间</text>
-        <picker :range="deliveryList" range-key="text" @change="onChangeDelivery">
-          <view class="icon-fonts picker">{{ activeDelivery.text }}</view>
+        <picker :range="deliveryList" @change="onChangeDelivery">
+          <view class="icon-fonts picker">{{ deliveryList[activeIndex] }}</view>
         </picker>
       </view>
       <view class="item">
