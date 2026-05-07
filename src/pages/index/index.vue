@@ -7,6 +7,9 @@
     <scroll-view
       class="scroll-view"
       scroll-y
+      enable-back-to-top
+      lower-threshold="150"
+      :style="{ height: scrollHeight }"
       @scrolltolower="onScrollToLower"
     >
         <template>
@@ -28,6 +31,9 @@ import PetNavBar from '@/components/PetNavBar.vue';
 import PetShopCart from '@/components/PetShopCart.vue';
 import { getHomeBannerAPI, getHomeHotAPI } from '@/services/home'
 
+const { windowHeight } = uni.getSystemInfoSync()
+const scrollHeight = windowHeight - 44 - 180 + 'px'
+
 // 获取轮播图数据
 const bannerList = ref<BannerItem[]>([])
 const getHomeBannerData = async () => {
@@ -40,7 +46,7 @@ const hotList = ref<HotItem[]>([])
 const hotPage = ref(1)
 const isLoadingMore = ref(false)
 const isFinish = ref(false)
-const pageSize = 6
+const pageSize = 9
 
 const getHomeHotData = async () => {
   if (isLoadingMore.value || isFinish.value) return
@@ -106,7 +112,6 @@ page {
 }
 
 .scroll-view {
-  flex: 1;
   overflow: hidden;
 }
 </style>

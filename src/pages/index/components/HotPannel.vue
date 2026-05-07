@@ -63,11 +63,18 @@ defineProps<{
       </navigator>
     </view>
     <view class="loading-text" v-if="isFinish || isLoading">
-      {{ isFinish ? '没有更多数据哟...' : '数据正在加载中...' }}
+      {{ isFinish ? '亲没有更多数据了吆...' : '数据正在加载中...' }}
     </view>
   </view>
 </template>
 
 <style lang="scss">
 @use './styles/hot.scss';
+.loading-text {
+  width: 100%;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 24rpx;
+  color: #bbb;
+}
 </style>
