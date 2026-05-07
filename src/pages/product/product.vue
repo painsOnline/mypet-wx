@@ -103,8 +103,14 @@ const detailHtml = computed(() => {
       <!-- 商品简介 -->
       <view class="meta">
         <view class="price">
-          <text class="symbol">¥</text>
-          <text class="number">{{ product?.price }}</text>
+          <view class="now_price">
+            <text class="symbol">到手价¥</text>
+            <text class="number">{{ product?.price }}</text>
+          </view>
+          <view class="old_price">
+            <text>原价¥</text>
+            <text class="old_price_number">{{ product?.oldPrice }}</text>
+          </view>
         </view>
         <view class="name ellipsis">{{ product?.name }}</view>
         <view class="desc"> {{ product?.desc }} </view>

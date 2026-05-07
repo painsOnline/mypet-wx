@@ -84,13 +84,18 @@ page {
     position: relative;
     border-bottom: 1rpx solid #eaeaea;
     .price {
-      height: 130rpx;
-      padding: 25rpx 30rpx 0;
-      color: #fff;
+      padding: 25rpx 20rpx;
+      color: red;
       font-size: 34rpx;
       box-sizing: border-box;
       background-color: #35c8a9;
     }
+
+    .old_price{
+      text-decoration: line-through;
+      color: #a64141;
+    }
+
     .number {
       font-size: 56rpx;
     }
