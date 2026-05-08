@@ -6,7 +6,7 @@ import { http } from '@/utils/http'
  */
 export const getMemberAddressAPI = async () => {
   return http<AddressItem[]>({
-    url: '/member/address',
+    url: '/frontend/member/address',
     method: 'GET',
   })
 }
@@ -16,7 +16,7 @@ export const getMemberAddressAPI = async () => {
  */
 export const getMemberAddressByIdAPI = async (id: string) => {
   return http<AddressItem>({
-    url: `/member/address/${id}`,
+    url: `/frontend/member/address/${id}`,
     method: 'GET',
   })
 }
@@ -26,7 +26,7 @@ export const getMemberAddressByIdAPI = async (id: string) => {
  */
 export const postMemberAddressAPI = async (data: AddressParams) => {
   return http<AddressItem>({
-    url: '/member/address',
+    url: '/frontend/member/address',
     method: 'POST',
     data,
   })
@@ -37,7 +37,7 @@ export const postMemberAddressAPI = async (data: AddressParams) => {
  */
 export const putMemberAddressByIdAPI = async (id: string, data: AddressParams) => {
   return http<AddressItem>({
-    url: `/member/address/${id}`,
+    url: `/frontend/member/address/${id}`,
     method: 'PUT',
     data,
   })
@@ -48,7 +48,7 @@ export const putMemberAddressByIdAPI = async (id: string, data: AddressParams) =
  */
 export const deleteMemberAddressByIdAPI = async (id: string) => {
   return http<string>({
-    url: `/member/address/${id}`,
+    url: `/frontend/member/address/${id}`,
     method: 'DELETE',
   })
 }

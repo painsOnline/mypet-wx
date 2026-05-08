@@ -7,7 +7,7 @@ import { http } from '@/utils/http'
  */
 export const getProductByIdAPI = async (id: string) => {
   return http<ProductDetail>({
-    url: '/goods',
+    url: '/frontend/goods',
     method: 'GET',
     data: { id },
   })

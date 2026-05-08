@@ -7,7 +7,7 @@ import { http } from '@/utils/http'
  */
 export const getMemberOrderAPI = async (params: OrderListParams) => {
   return http<PageResult<OrderItem>>({
-    url: '/member/order',
+    url: '/frontend/member/order',
     method: 'GET',
     data: params,
   })
@@ -18,7 +18,7 @@ export const getMemberOrderAPI = async (params: OrderListParams) => {
  */
 export const getMemberOrderByIdAPI = async (id: string) => {
   return http<OrderDetail>({
-    url: `/member/order/${id}`,
+    url: `/frontend/member/order/${id}`,
     method: 'GET',
   })
 }
@@ -28,7 +28,7 @@ export const getMemberOrderByIdAPI = async (id: string) => {
  */
 export const putMemberOrderReceiptByIdAPI = async (id: string) => {
   return http<OrderDetail>({
-    url: `/member/order/${id}/receipt`,
+    url: `/frontend/member/order/${id}/receipt`,
     method: 'PUT',
   })
 }
@@ -38,7 +38,7 @@ export const putMemberOrderReceiptByIdAPI = async (id: string) => {
  */
 export const getMemberOrderCancelByIdAPI = async (id: string, data: { cancelReason: string }) => {
   return http<OrderDetail>({
-    url: `/member/order/${id}/cancel`,
+    url: `/frontend/member/order/${id}/cancel`,
     method: 'PUT',
     data,
   })
@@ -49,7 +49,7 @@ export const getMemberOrderCancelByIdAPI = async (id: string, data: { cancelReas
  */
 export const deleteMemberOrderAPI = async (id: string) => {
   return http<boolean>({
-    url: `/member/order/${id}`,
+    url: `/frontend/member/order/${id}`,
     method: 'DELETE',
   })
 }
@@ -59,7 +59,7 @@ export const deleteMemberOrderAPI = async (id: string) => {
  */
 export const getMemberOrderPreAPI = async () => {
   return http<OrderPreResult>({
-    url: '/member/order/pre',
+    url: '/frontend/member/order/pre',
     method: 'GET',
   })
 }
@@ -69,7 +69,7 @@ export const getMemberOrderPreAPI = async () => {
  */
 export const getMemberOrderPreNowAPI = async (data: { skuId: string; count: string; addressId?: string }) => {
   return http<OrderPreResult>({
-    url: '/member/order/pre/now',
+    url: '/frontend/member/order/pre/now',
     method: 'GET',
     data,
   })
@@ -80,7 +80,7 @@ export const getMemberOrderPreNowAPI = async (data: { skuId: string; count: stri
  */
 export const getMemberOrderRepurchaseByIdAPI = async (id: string) => {
   return http<OrderPreResult>({
-    url: `/member/order/repurchase/${id}`,
+    url: `/frontend/member/order/repurchase/${id}`,
     method: 'GET',
   })
 }
@@ -90,7 +90,7 @@ export const getMemberOrderRepurchaseByIdAPI = async (id: string) => {
  */
 export const postMemberOrderAPI = async (data: OrderCreateParams) => {
   return http<{ id: string }>({
-    url: '/member/order',
+    url: '/frontend/member/order',
     method: 'POST',
     data,
   })

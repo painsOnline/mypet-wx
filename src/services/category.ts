@@ -8,7 +8,7 @@ import { http } from '@/utils/http'
  */
 export const getCategoryListAPI = async () => {
   return http<CategoryItem[]>({
-    url: '/category/list',
+    url: '/frontend/category/list',
     method: 'GET',
   })
 }
@@ -19,7 +19,7 @@ export const getCategoryListAPI = async () => {
  */
 export const getProductsByCategoryIdAPI = async (data: { id: string; page?: number; pageSize?: number }) => {
   return http<PageResult<ProductDetail>>({
-    url: '/category/product/list',
+    url: '/frontend/category/product/list',
     method: 'GET',
     data,
   })

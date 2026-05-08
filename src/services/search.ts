@@ -7,7 +7,7 @@ import { http } from '@/utils/http'
  */
 export const getSearchAPI = (data: { keyword: string; page?: number; pageSize?: number }) => {
   return http<PageResult<ProductDetail>>({
-    url: '/search',
+    url: '/frontend/search',
     method: 'GET',
     data,
   })

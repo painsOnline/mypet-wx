@@ -6,7 +6,7 @@ import { http } from '@/utils/http'
  */
 export const getMemberCartAPI = async () => {
   return http<CartItem[]>({
-    url: '/member/cart',
+    url: '/frontend/member/cart',
     method: 'GET',
   })
 }
@@ -16,7 +16,7 @@ export const getMemberCartAPI = async () => {
  */
 export const resetMemberCartAPI = async (data: CartItem[]) => {
   return http<boolean>({
-    url: '/member/cart',
+    url: '/frontend/member/cart',
     method: 'PUT',
     data,
   })

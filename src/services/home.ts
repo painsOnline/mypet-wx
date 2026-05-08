@@ -8,7 +8,7 @@ import { http } from '@/utils/http'
  */
 export const getHomeBannerAPI = async (distributionSite = 1) => {
   return http<BannerItem[]>({
-    url: '/home/banner',
+    url: '/frontend/home/banner',
     method: 'GET',
     data: { distributionSite },
   })
@@ -20,7 +20,7 @@ export const getHomeBannerAPI = async (distributionSite = 1) => {
  */
 export const getHomeHotAPI = async (data: HotListParams = {}) => {
   return http<PageResult<HotItem>>({
-    url: '/home/hot',
+    url: '/frontend/home/hot',
     method: 'GET',
     data,
   })

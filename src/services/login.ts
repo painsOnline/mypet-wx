@@ -12,7 +12,7 @@ type LoginWxMinParams = {
  */
 export const postLoginWxMinAPI = async (data: LoginWxMinParams) => {
   return http<LoginResult>({
-    url: '/member/login/wxMin',
+    url: '/frontend/member/login/wxMin',
     method: 'POST',
     data,
   })
@@ -23,7 +23,7 @@ export const postLoginWxMinAPI = async (data: LoginWxMinParams) => {
  */
 export const postLoginWxMinSimpleAPI = async (phoneNumber: string) => {
   return http<LoginResult>({
-    url: '/member/login/wxMin/simple',
+    url: '/frontend/member/login/wxMin/simple',
     method: 'POST',
     data: { phoneNumber },
   })
@@ -36,7 +36,7 @@ type LoginParams = { account: string; password: string }
  */
 export const postLoginAPI = async (data: LoginParams) => {
   return http<LoginResult>({
-    url: '/member/login',
+    url: '/frontend/member/login',
     method: 'POST',
     data,
   })
