@@ -1,42 +1,14 @@
 import type { LoginResult } from '@/types/member'
 import { http } from '@/utils/http'
 
-type LoginWxMinParams = {
-  code: string
-  encryptedData?: string
-  iv?: string
-}
+type LoginParams = { code: string }
 
 /**
- * 小程序登录
+ * 小程序快速登录：wx.login() code → 后端换 openid 登录
  */
-export const postLoginWxMinAPI = async (data: LoginWxMinParams) => {
+export const postLoginWxMinQuickAPI = async (data: LoginParams) => {
   return http<LoginResult>({
-    url: '/frontend/member/login/wxMin',
-    method: 'POST',
-    data,
-  })
-}
-
-/**
- * 小程序登录_内测版
- */
-export const postLoginWxMinSimpleAPI = async (phoneNumber: string) => {
-  return http<LoginResult>({
-    url: '/frontend/member/login/wxMin/simple',
-    method: 'POST',
-    data: { phoneNumber },
-  })
-}
-
-type LoginParams = { account: string; password: string }
-
-/**
- * 传统登录-用户名+密码
- */
-export const postLoginAPI = async (data: LoginParams) => {
-  return http<LoginResult>({
-    url: '/frontend/member/login',
+    url: '/frontend/member/login/wxMin/quick',
     method: 'POST',
     data,
   })

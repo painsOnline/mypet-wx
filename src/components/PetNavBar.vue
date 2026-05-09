@@ -18,7 +18,7 @@ console.log('currentPage:', currentPage)
     <!-- logo文字 -->
     <view class="logo">
       <image class="logo-image" src="@/static/images/logo.png"></image>
-      <text class="logo-text">联系电话：15921680355</text>
+      <text class="logo-text">正品保证 小时达</text>
     </view>
     <!-- 搜索条 -->
     <navigator url="/pages/search/search" open-type="navigate" animation-type="none" animation-duration="0" hover-class="none" class="search">

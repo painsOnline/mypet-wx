@@ -13,8 +13,13 @@
 import { useMemberStore } from '@/stores'
 import type { DataResult } from '@/types/global'
 
-// Vite 环境变量：开发环境 localhost:8080，生产环境 api.mypet.com
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
+// Vite 环境变量（编译时静态替换）
+// 开发: .env.development → http://localhost:8080
+// 生产: .env.production  → https://app.xinqianmao.com:8080
+// 生产模式下禁止回退到 localhost
+const baseURL = import.meta.env.MODE === 'production'
+  ? (import.meta.env.VITE_API_BASE_URL || 'https://app.xinqianmao.com:8080')
+  : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080')
 
 // 添加拦截器
 const httpInterceptor = {
