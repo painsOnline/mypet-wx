@@ -14,7 +14,7 @@ const orderTabs = ref([
   { orderState: 2, title: '配送中', isRender: false },
   { orderState: 3, title: '已收货', isRender: false },
   { orderState: 4, title: '已完成', isRender: false },
-  { orderState: 5, title: '退款/退货', isRender: false },
+  { orderState: 5, title: '已取消', isRender: false },
 ])
 
 console.log("query type:" + query.type)

@@ -4,7 +4,7 @@ import { onReady } from '@dcloudio/uni-app'
 import type { OrderItem, OrderListParams } from '@/types/order'
 import { OrderState } from '@/enums/order'
 import { orderStateList } from '@/constants/order'
-import {getMemberOrderAPI, putMemberOrderReceiptByIdAPI, deleteMemberOrderAPI} from '@/services/order'
+import {getMemberOrderAPI, putMemberOrderReceiptByNoAPI, deleteMemberOrderByNoAPI} from '@/services/order'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
@@ -59,16 +59,16 @@ const getMemberOrderData = async () => {
 }
 
 // 确认收货
-const onOrderConfirm = (id: string) => {
+const onOrderConfirm = (orderNo: string) => {
   uni.showModal({
     content: '为保障您的权益，请收到货并确认无误后，再确认收货',
     confirmColor: '#FF8833',
     success: async (res) => {
       if (res.confirm) {
-        await putMemberOrderReceiptByIdAPI(id)
+        await putMemberOrderReceiptByNoAPI(orderNo)
         uni.showToast({ icon: 'success', title: '确认收货成功' })
         // 确认成功，更新为已收货
-        const order = orderList.value.find((v) => v.id === id)
+        const order = orderList.value.find((v) => v.orderNo === orderNo)
         if (order) order.orderState = OrderState.Received
       }
     },
@@ -76,15 +76,15 @@ const onOrderConfirm = (id: string) => {
 }
 
 // 取消订单
-const onOrderCannel = (id: string) => {
+const onOrderCannel = (orderNo: string) => {
   uni.showModal({
     content: '你确定要取消该订单？',
     confirmColor: '#FF8833',
     success: async (res) => {
       if (res.confirm) {
-        await deleteMemberOrderAPI(id)
+        await deleteMemberOrderByNoAPI(orderNo)
         // 取消成功，界面中修改订单状态
-        const order = orderList.value.find((v) => v.id === id)
+        const order = orderList.value.find((v) => v.orderNo === orderNo)
         if (order) order.orderState = OrderState.Cancelled
       }
     },
@@ -144,7 +144,7 @@ const onRefresherrefresh = async () => {
         v-for="item in order.skus"
         :key="item.id"
         class="goods"
-        :url="`/pagesOrder/detail/detail?id=${order.id}`"
+        :url="`/pagesOrder/detail/detail?orderNo=${order.orderNo}`"
         open-type="navigate"
         hover-class="none"
       >
@@ -160,24 +160,26 @@ const onRefresherrefresh = async () => {
       <!-- 支付信息 -->
       <view class="payment">
         <text class="quantity">共{{ order.totalNum }}件商品</text>
-        <text>实付</text>
-        <text class="amount"> <text class="symbol">¥</text>{{ order.actualPayMoney }}</text>
+        <text v-if="order.totalMoney > order.actualPayMoney" class="total-price">总价¥{{ order.totalMoney }}元</text>
+        <text class="pay-label">实付</text>
+        <text class="amount"><text class="symbol">¥</text>{{ order.actualPayMoney }}</text>
+        <text v-if="order.totalMoney > order.actualPayMoney" class="discount">减免¥{{ (order.totalMoney - order.actualPayMoney).toFixed(2) }}</text>
       </view>
       <!-- 订单操作按钮 -->
       <view class="action">
         <!-- 待配送可以取消 -->
         <template v-if="order.orderState === OrderState.ToDeliver">
-          <view class="button primary" @tap="onOrderCannel(order.id)">取消订单</view>
+          <view class="button primary" @tap="onOrderCannel(order.orderNo)">取消订单</view>
         </template>
         <!-- 配送中: 展示确认收货 -->
         <template v-if="order.orderState === OrderState.Delivering">
-          <view class="button primary" @tap="onOrderConfirm(order.id)">确认收货</view>
+          <view class="button primary" @tap="onOrderConfirm(order.orderNo)">确认收货</view>
         </template>
         <!-- 已完成可以再次购买 -->
         <template v-if="order.orderState === OrderState.Completed">
           <navigator
             class="button secondary"
-            :url="`/pagesOrder/create/create?orderId=${order.id}`"
+            :url="`/pagesOrder/create/create?orderNo=${order.orderNo}`"
             hover-class="none"
           >
             再次购买

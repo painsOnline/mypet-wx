@@ -47,10 +47,10 @@
         class="myOrderNavItem"
       >
         <image
-          src="/static/tabs/order_refound.png"
+          src="/static/tabs/order_cancel.png"
           mode="scaleToFill"
         />
-        <text>退款/退货</text>
+        <text>已取消</text>
       </navigator>
     </view>
   </view>

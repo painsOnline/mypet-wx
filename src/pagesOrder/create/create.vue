@@ -78,7 +78,7 @@ const onOrderSubmit = async () => {
   const cartStore = useCartStore()
   cartStore.clearMemberLocalCart()
   // 关闭当前页面，跳转到订单详情，传递订单id
-  uni.redirectTo({ url: `/pagesOrder/detail/detail?id=${res.result.id}` })
+  uni.redirectTo({ url: `/pagesOrder/detail/detail?orderNo=${res.result.orderNo}` })
 }
 </script>
 
@@ -149,8 +149,16 @@ const onOrderSubmit = async () => {
     <!-- 支付金额 -->
     <view class="settlement">
       <view class="item">
+        <text class="text">应付金额: </text>
+        <text class="number symbol danger">{{ orderPre?.summary.totalPayPrice.toFixed(2) }}</text>
+      </view>
+      <view v-if="orderPre && orderPre.summary.totalPrice > orderPre.summary.totalPayPrice" class="item">
         <text class="text">商品总价: </text>
-        <text class="number symbol">{{ orderPre?.summary.totalPrice.toFixed(2) }}</text>
+        <text class="number symbol old-price">{{ orderPre.summary.totalPrice.toFixed(2) }}</text>
+      </view>
+      <view v-if="orderPre && orderPre.summary.totalPrice > orderPre.summary.totalPayPrice" class="item">
+        <text class="text">优惠金额: </text>
+        <text class="number danger">-¥{{ (orderPre.summary.totalPrice - orderPre.summary.totalPayPrice).toFixed(2) }}</text>
       </view>
       <view class="item">
         <text class="text">运费: </text>
@@ -161,8 +169,14 @@ const onOrderSubmit = async () => {
 
   <!-- 吸底工具栏 -->
   <view class="toolbar" :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }">
-    <view class="total-pay symbol">
-      <text class="number">{{ orderPre?.summary.totalPayPrice.toFixed(2) }}</text>
+    <view class="total-pay">
+      <view class="pay-line">
+        <text class="symbol pay-amount">{{ orderPre?.summary.totalPayPrice.toFixed(2) }}</text>
+      </view>
+      <view v-if="orderPre && orderPre.summary.totalPrice > orderPre.summary.totalPayPrice" class="discount-line">
+        <text class="orig-price symbol">{{ orderPre.summary.totalPrice.toFixed(2) }}</text>
+        <text class="discount-label">已优惠¥{{ (orderPre.summary.totalPrice - orderPre.summary.totalPayPrice).toFixed(2) }}</text>
+      </view>
     </view>
     <view class="button" :class="{ disabled: !selecteAddress?.id }" @tap="onOrderSubmit">
       提交订单

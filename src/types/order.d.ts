@@ -13,6 +13,8 @@ export type OrderList = {
 export type OrderDetail = {
   /** 订单编号 */
   id: string
+  /** 订单号 */
+  orderNo: string
   /** 订单状态，1待配送、2配送中、3已收货、4已完成、5已取消 */
   orderState: OrderState
   /** 商品集合 [ 商品信息 ] */
@@ -133,4 +135,6 @@ export type OrderCreateParams = {
 export type OrderCreateResult = {
   /** 订单Id */
   id: string
+  /** 订单号 */
+  orderNo: string
 }

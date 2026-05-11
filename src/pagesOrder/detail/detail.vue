@@ -46,16 +46,20 @@
         <!-- 合计 -->
         <view class="total">
           <view class="row">
+            <view class="text">应付金额: </view>
+            <view class="symbol primary">{{ order.actualPayMoney }}</view>
+          </view>
+          <view v-if="order.totalMoney > order.actualPayMoney" class="row">
             <view class="text">商品总价: </view>
-            <view class="symbol">{{ order.totalMoney }}</view>
+            <view class="symbol old">{{ order.totalMoney }}</view>
+          </view>
+          <view v-if="order.totalMoney > order.actualPayMoney" class="row">
+            <view class="text">优惠金额: </view>
+            <view class="discount">-¥{{ (order.totalMoney - order.actualPayMoney).toFixed(2) }}</view>
           </view>
           <view class="row">
             <view class="text">运费: </view>
             <view>免配送费</view>
-          </view>
-          <view class="row">
-            <view class="text">应付金额: </view>
-            <view class="symbol primary">{{ order.payMoney }}</view>
           </view>
         </view>
       </view>
@@ -65,9 +69,11 @@
         <view class="title">订单信息</view>
         <view class="row">
           <view class="item">
-            订单编号: {{ query.id }} <text class="copy" @tap="onCopy(query.id)">复制</text>
+            订单编号: {{ order.orderNo }} <text class="copy" @tap="onCopy(order.orderNo)">复制</text>
           </view>
           <view class="item">下单时间: {{ order.createTime }}</view>
+          <view v-if="order.deliveryTime" class="item">配送时间: {{ order.deliveryTime }}</view>
+          <view v-if="order.buyerMessage" class="item">订单备注: {{ order.buyerMessage }}</view>
         </view>
       </view>
 
@@ -121,9 +127,9 @@
 import { OrderState } from '@/enums/order'
 import {orderStateList} from '@/constants/order'
 import {
-  getMemberOrderByIdAPI,
-  getMemberOrderCancelByIdAPI,
-  putMemberOrderReceiptByIdAPI,
+  getMemberOrderByNoAPI,
+  cancelMemberOrderByNoAPI,
+  putMemberOrderReceiptByNoAPI,
 } from '@/services/order'
 import type { OrderDetail } from '@/types/order'
 import { onLoad, onReady } from '@dcloudio/uni-app'
@@ -151,7 +157,7 @@ const onCopy = (id: string) => {
 }
 // 获取页面参数
 const query = defineProps<{
-  id: string
+  orderNo: string
 }>()
 
 // 获取页面栈
@@ -172,7 +178,7 @@ onReady(() => {
 // 获取订单详情
 const order = ref<OrderDetail>()
 const getMemberOrderByIdData = async () => {
-  const res = await getMemberOrderByIdAPI(query.id)
+  const res = await getMemberOrderByNoAPI(query.orderNo)
   order.value = res.result
 }
 
@@ -191,7 +197,7 @@ const onOrderConfirm = () => {
     confirmColor: '#FF8833',
     success: async (success) => {
       if (success.confirm) {
-        const res = await putMemberOrderReceiptByIdAPI(query.id)
+        const res = await putMemberOrderReceiptByNoAPI(query.orderNo)
         // 更新订单状态
         order.value = res.result
       }
@@ -202,7 +208,7 @@ const onOrderConfirm = () => {
 // 取消订单
 const onOrderCancel = async () => {
   // 发送请求
-  const res = await getMemberOrderCancelByIdAPI(query.id, { cancelReason: reason.value })
+  const res = await cancelMemberOrderByNoAPI(query.orderNo, { cancelReason: reason.value })
   // 更新订单信息
   order.value = res.result
   // 关闭弹窗

@@ -118,9 +118,27 @@
       margin-right: 16rpx;
     }
 
+    .total-price {
+      font-size: 24rpx;
+      color: #999;
+      text-decoration: line-through;
+      margin-right: 10rpx;
+    }
+
+    .pay-label {
+      font-size: 24rpx;
+      margin-right: 4rpx;
+    }
+
     .amount {
-      color: #444;
+      color: #cf4444;
       margin-left: 6rpx;
+    }
+
+    .discount {
+      font-size: 24rpx;
+      color: #cf4444;
+      margin-left: 10rpx;
     }
 
     .symbol {

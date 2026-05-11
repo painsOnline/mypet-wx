@@ -14,42 +14,42 @@ export const getMemberOrderAPI = async (params: OrderListParams) => {
 }
 
 /**
- * 订单详情
+ * 订单详情（orderNo）
  */
-export const getMemberOrderByIdAPI = async (id: string) => {
+export const getMemberOrderByNoAPI = async (orderNo: string) => {
   return http<OrderDetail>({
-    url: `/frontend/member/order/${id}`,
+    url: `/frontend/member/order/${orderNo}`,
     method: 'GET',
   })
 }
 
 /**
- * 确认收货
+ * 确认收货（orderNo）
  */
-export const putMemberOrderReceiptByIdAPI = async (id: string) => {
+export const putMemberOrderReceiptByNoAPI = async (orderNo: string) => {
   return http<OrderDetail>({
-    url: `/frontend/member/order/${id}/receipt`,
+    url: `/frontend/member/order/${orderNo}/receipt`,
     method: 'PUT',
   })
 }
 
 /**
- * 取消订单
+ * 取消订单（orderNo）
  */
-export const getMemberOrderCancelByIdAPI = async (id: string, data: { cancelReason: string }) => {
+export const cancelMemberOrderByNoAPI = async (orderNo: string, data: { cancelReason: string }) => {
   return http<OrderDetail>({
-    url: `/frontend/member/order/${id}/cancel`,
+    url: `/frontend/member/order/${orderNo}/cancel`,
     method: 'PUT',
     data,
   })
 }
 
 /**
- * 删除订单
+ * 删除订单（orderNo）
  */
-export const deleteMemberOrderAPI = async (id: string) => {
+export const deleteMemberOrderByNoAPI = async (orderNo: string) => {
   return http<boolean>({
-    url: `/frontend/member/order/${id}`,
+    url: `/frontend/member/order/${orderNo}`,
     method: 'DELETE',
   })
 }
@@ -76,11 +76,11 @@ export const getMemberOrderPreNowAPI = async (data: { skuId: string; count: stri
 }
 
 /**
- * 预付订单（再次购买）
+ * 预付订单（再次购买）（orderNo）
  */
-export const getMemberOrderRepurchaseByIdAPI = async (id: string) => {
+export const getMemberOrderRepurchaseByNoAPI = async (orderNo: string) => {
   return http<OrderPreResult>({
-    url: `/frontend/member/order/repurchase/${id}`,
+    url: `/frontend/member/order/repurchase/${orderNo}`,
     method: 'GET',
   })
 }
@@ -89,7 +89,7 @@ export const getMemberOrderRepurchaseByIdAPI = async (id: string) => {
  * 提交订单
  */
 export const postMemberOrderAPI = async (data: OrderCreateParams) => {
-  return http<{ id: string }>({
+  return http<{ id: string; orderNo: string }>({
     url: '/frontend/member/order',
     method: 'POST',
     data,

@@ -171,6 +171,17 @@ page {
   .danger {
     color: #cf4444;
   }
+
+  .old-price {
+    color: #999;
+    text-decoration: line-through;
+  }
+
+  .symbol::before {
+    content: '¥';
+    font-size: 80%;
+    margin-right: 5rpx;
+  }
 }
 
 /* 吸底工具栏 */
@@ -182,7 +193,7 @@ page {
   z-index: 1;
 
   background-color: #fff;
-  padding: 0 20rpx;
+  padding: 10rpx 20rpx;
   border-top: 1rpx solid #eaeaea;
   display: flex;
   justify-content: space-between;
@@ -190,11 +201,30 @@ page {
   box-sizing: content-box;
 
   .total-pay {
-    font-size: 40rpx;
-    color: #cf4444;
-
-    .decimal {
-      font-size: 75%;
+    .pay-line {
+      .pay-amount {
+        font-size: 40rpx;
+        color: #cf4444;
+      }
+      .symbol::before {
+        content: '¥';
+        font-size: 80%;
+        margin-right: 5rpx;
+      }
+    }
+    .discount-line {
+      display: flex;
+      align-items: baseline;
+      .orig-price {
+        font-size: 24rpx;
+        color: #999;
+        text-decoration: line-through;
+      }
+      .discount-label {
+        font-size: 24rpx;
+        color: #cf4444;
+        margin-left: 16rpx;
+      }
     }
   }
 
