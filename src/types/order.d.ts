@@ -27,6 +27,16 @@ export type OrderDetail = {
   receiverAddress: string
   /** 下单时间 */
   createTime: string
+  /** 付款时间 */
+  payTime?: string
+  /** 配送时间 */
+  deliveryTime?: string
+  /** 收货时间 */
+  receiveTime?: string
+  /** 完成时间 */
+  finishTime?: string
+  /** 取消时间 */
+  cancelTime?: string
   /** 商品总价 */
   totalMoney: number
   /** 应付金额 */

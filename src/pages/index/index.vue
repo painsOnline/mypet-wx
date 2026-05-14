@@ -29,16 +29,19 @@ import type { BannerItem, HotItem } from '@/types/home';
 import HotPannel from './components/HotPannel.vue';
 import PetNavBar from '@/components/PetNavBar.vue';
 import PetShopCart from '@/components/PetShopCart.vue';
-import { getHomeBannerAPI, getHomeHotAPI } from '@/services/home'
+import { getHomeHotAPI } from '@/services/home'
+import { useShopStore } from '@/stores/modules/shop'
 
 const { windowHeight } = uni.getSystemInfoSync()
 const scrollHeight = windowHeight - 44 - 180 + 'px'
 
-// 获取轮播图数据
+const { shopData, fetchShop } = useShopStore()
+
+// 获取轮播图数据（从shop接口）
 const bannerList = ref<BannerItem[]>([])
 const getHomeBannerData = async () => {
-  const res = await getHomeBannerAPI()
-  bannerList.value = res.result
+  const shop = await fetchShop()
+  if (shop) bannerList.value = shop.banners || []
 }
 
 // 获取热门推荐数据（分页）

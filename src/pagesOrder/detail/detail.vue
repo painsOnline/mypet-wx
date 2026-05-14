@@ -72,7 +72,10 @@
             订单编号: {{ order.orderNo }} <text class="copy" @tap="onCopy(order.orderNo)">复制</text>
           </view>
           <view class="item">下单时间: {{ order.createTime }}</view>
-          <view v-if="order.deliveryTime" class="item">配送时间: {{ order.deliveryTime }}</view>
+          <view v-if="order.orderState >= 2 && order.deliveryTime" class="item">配送时间: {{ order.deliveryTime }}</view>
+          <view v-if="order.orderState >= 3 && order.receiveTime" class="item">收货时间: {{ order.receiveTime }}</view>
+          <view v-if="order.orderState === 4 && order.finishTime" class="item">完成时间: {{ order.finishTime }}</view>
+          <view v-if="order.orderState === 5 && order.cancelTime" class="item">取消时间: {{ order.cancelTime }}</view>
           <view v-if="order.buyerMessage" class="item">订单备注: {{ order.buyerMessage }}</view>
         </view>
       </view>

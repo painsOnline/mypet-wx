@@ -5,6 +5,7 @@ import PetSkuPopup from '@/components/PetSkuPopup.vue'
 import { getProductByIdAPI } from '@/services/product'
 import type { ProductDetail } from '@/types/product'
 import { SkuMode} from '@/enums/product'
+import { useShopStore } from '@/stores/modules/shop'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -62,6 +63,15 @@ const toggleCartVisible = () => {
 const selectArrText = computed(() => {
   return skuPopRef.value?.selectArr?.join(' ').trim() || '请选择商品规格'
 })
+
+// 店铺免配门槛
+const { shopData, fetchShop } = useShopStore()
+fetchShop()
+const freeShippingAmount = computed(() => shopData.value?.freeShippingAmount ?? 0)
+const meetFreeShipping = computed(() => {
+  return product.value ? Number(product.value.price) >= freeShippingAmount.value : false
+})
+const buyNowText = computed(() => meetFreeShipping.value ? '立即购买' : `满${freeShippingAmount.value}元起配`)
 
 // 处理商品详情HTML，使图片和文本适配小程序宽度
 const detailHtml = computed(() => {
@@ -167,7 +177,10 @@ const detailHtml = computed(() => {
     </view>
     <view class="buttons">
       <view @tap="onOpenSkuPopup(product, SkuMode.Cart)" class="addcart"> 加入购物车 </view>
-      <view @tap="onOpenSkuPopup(product, SkuMode.Buy)" class="payment"> 立即购买 </view>
+      <view @tap="meetFreeShipping ? onOpenSkuPopup(product, SkuMode.Buy) : undefined" class="payment" :class="{ 'payment--disabled': !meetFreeShipping }">
+        <text v-if="meetFreeShipping" class="payment-text">立即购买</text>
+        <text v-else class="payment-text--small">满{{ freeShippingAmount }}元起配</text>
+      </view>
     </view>
   </view>
   <PetShopCart ref="shopCartRef" hideOnMask />

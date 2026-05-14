@@ -261,6 +261,24 @@ page {
       background-color: #FEE53F;
       color: #333;
       margin-left: 20rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      &--disabled {
+        background-color: #e0e0e0;
+      }
+      &-text {
+        font-size: 26rpx;
+        font-weight: 600;
+      }
+      &-text--small {
+        font-size: 22rpx;
+        color: #999;
+        line-height: 1.2;
+        text-align: center;
+        white-space: normal;
+      }
     }
   }
   .icons {

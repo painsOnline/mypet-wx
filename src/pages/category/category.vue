@@ -94,7 +94,7 @@ const pageSize = 5
 const skuPopRef = ref()
 const shopCartRef = ref()
 
-const onOpenSkuPopup = (product: ProductDetail, popMod: SkuMode = SkuMode.Both) => {
+const onOpenSkuPopup = (product: ProductDetail, popMod: SkuMode = SkuMode.Cart) => {
   skuPopRef.value.openSkuPopup(product, popMod)
 }
 

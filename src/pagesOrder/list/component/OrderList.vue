@@ -4,7 +4,7 @@ import { onReady } from '@dcloudio/uni-app'
 import type { OrderItem, OrderListParams } from '@/types/order'
 import { OrderState } from '@/enums/order'
 import { orderStateList } from '@/constants/order'
-import {getMemberOrderAPI, putMemberOrderReceiptByNoAPI, deleteMemberOrderByNoAPI} from '@/services/order'
+import {getMemberOrderAPI, putMemberOrderReceiptByNoAPI, deleteMemberOrderByNoAPI, cancelMemberOrderByNoAPI} from '@/services/order'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
@@ -32,6 +32,16 @@ const isFinish = ref(false)
 // 是否触发下拉刷新
 const isTriggered = ref(false)
 
+
+const getOrderTimeLabel = (order: OrderItem) => {
+  const state = order.orderState
+  if (state === OrderState.ToDeliver && order.createTime) return '创建时间：' + order.createTime
+  if (state === OrderState.Delivering && order.deliveryTime) return '配送时间：' + order.deliveryTime
+  if (state === OrderState.Received && order.receiveTime) return '收货时间：' + order.receiveTime
+  if (state === OrderState.Completed && order.finishTime) return '完成时间：' + order.finishTime
+  if (state === OrderState.Cancelled && order.cancelTime) return '取消时间：' + order.cancelTime
+  return '创建时间：' + (order.createTime || '')
+}
 
 const getMemberOrderData = async () => {
   // 如果数据出于加载中，退出函数
@@ -82,7 +92,7 @@ const onOrderCannel = (orderNo: string) => {
     confirmColor: '#FF8833',
     success: async (res) => {
       if (res.confirm) {
-        await deleteMemberOrderByNoAPI(orderNo)
+        await cancelMemberOrderByNoAPI(orderNo, { cancelReason: '用户取消' })
         // 取消成功，界面中修改订单状态
         const order = orderList.value.find((v) => v.orderNo === orderNo)
         if (order) order.orderState = OrderState.Cancelled
@@ -135,7 +145,7 @@ const onRefresherrefresh = async () => {
     <view class="card" v-for="order in orderList" :key="order.id">
       <!-- 订单信息 -->
       <view class="status">
-        <text class="date">创建时间: {{ order.createTime }}</text>
+        <text class="date">{{ getOrderTimeLabel(order) }}</text>
         <!-- 订单状态文字 -->
         <text>{{ orderStateList[order.orderState].text }}</text>
       </view>

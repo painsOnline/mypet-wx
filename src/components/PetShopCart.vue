@@ -3,6 +3,7 @@ import { ref, computed, watch, onUnmounted } from 'vue'
 import type { CartItem } from '@/types/cart'
 import { getMemberCartAPI, resetMemberCartAPI } from '@/services/cart'
 import { useMemberStore, useCartStore } from '@/stores'
+import { useShopStore } from '@/stores/modules/shop'
 
 const props = defineProps<{
   buyType?: string
@@ -12,9 +13,22 @@ const props = defineProps<{
 
 const memberStore = useMemberStore()
 const cartStore = useCartStore()
+const { shopData, fetchShop } = useShopStore()
+
+// 初始化shop数据
+fetchShop()
 
 // 是否已登录
 const isLoggedIn = computed(() => !!memberStore.profile?.token)
+
+// 免费配送门槛
+const freeShippingAmount = computed(() => shopData.value?.freeShippingAmount ?? 0)
+const freeShippingText = computed(() => `满${freeShippingAmount.value}元免配送费`)
+
+// 是否满足免配送门槛
+const meetFreeShipping = computed(() => {
+  return Number(getAllPrice.value) >= freeShippingAmount.value
+})
 
 // 购物车展示
 const isShowList = ref(false)
@@ -219,13 +233,16 @@ defineExpose({ addCart, toggleVisible })
       </view>
       <view class="middle" @click="toggleList">
         <view class="priceBox">
-          <text class="price" :class="{ active: getAllCount }">￥{{ getAllPrice }}</text>
+          <text class="price" :class="{ active: getAllCount }">￥{{ getAllNowPrice }}</text>
           <text class="discount">共减￥{{ getAllDiscount }}</text>
         </view>
-        <text class="deliveryPrice">满20免配送费</text>
+        <text class="deliveryPrice">{{ freeShippingText }}</text>
       </view>
       <view class="BtnRight">
-        <button class="goToBuy" :type="buyType" :disabled="buyDis || !isLoggedIn" @click="buyList">去结算</button>
+        <button class="goToBuy" :class="{ 'goToBuy--disabled': !meetFreeShipping }" :disabled="buyDis || !isLoggedIn || !meetFreeShipping" @click="buyList">
+          <text v-if="meetFreeShipping" class="goToBuy-text">去结算</text>
+          <text v-else class="goToBuy-text--small">满{{ freeShippingAmount }}元起配</text>
+        </button>
       </view>
     </view>
 

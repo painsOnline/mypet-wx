@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { useShopStore } from '@/stores/modules/shop'
+
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
+const { shopData, fetchShop } = useShopStore()
+fetchShop()
 
 // 导航项配置
 const navItems = [
@@ -17,7 +21,7 @@ console.log('currentPage:', currentPage)
   <view class="navbar" :style="{ paddingTop: safeAreaInsets!.top + 10 + 'px' }">
     <!-- logo文字 -->
     <view class="logo">
-      <image class="logo-image" src="@/static/images/logo.png"></image>
+      <image v-if="shopData?.logo" class="logo-image" :src="shopData!.logo"></image>
       <text class="logo-text">正品保证 小时达</text>
     </view>
     <!-- 搜索条 -->

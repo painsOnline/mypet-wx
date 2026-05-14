@@ -218,6 +218,27 @@
 .goToBuy {
   background-color: #fee53f;
   border-radius: 30rpx;
+  width: 210rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  &--disabled {
+    background-color: #e0e0e0;
+  }
+  &-text {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #333;
+  }
+  &-text--small {
+    font-size: 22rpx;
+    color: #999;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
+  }
 }
 
 .listMask {

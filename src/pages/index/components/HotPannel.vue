@@ -9,7 +9,7 @@ const emit = defineEmits<{
   'add-to-cart': [item: any]
 }>()
 
-const onOpenSkuPopup = (product: ProductDetail, popMod: SkuMode = SkuMode.Both) => {
+const onOpenSkuPopup = (product: ProductDetail, popMod: SkuMode = SkuMode.Cart) => {
   skuPopRef.value.openSkuPopup(product, popMod)
 }
 
