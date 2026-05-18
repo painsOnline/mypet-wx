@@ -92,22 +92,32 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
   })
 
   console.log('[PetSkuPopup] inStockValues:', JSON.stringify(Object.fromEntries(Object.entries(inStockValues).map(([k,v]) => [k, [...v]]))))
-  // SKU组件所需格式（只显示有库存可选的规格值）
+  // SKU组件所需格式
+  // 关键: spec_list 和 sku_name_arr 的 spec 顺序必须一致，通过 specId 对齐
+  const specList = (selectedPrduct.specs ?? []).map((specGroup) => ({
+    name: specGroup.specName || specGroup.name,
+    list: (specGroup.values ?? []).map((val: any) => ({ name: val.valueName || val.name })),
+  }))
+  const specOrder: Record<string, number> = {}
+  specList.forEach((spec, i) => { specOrder[spec.name] = i })
+
   selectedProduct.value = {
     _id: selectedPrduct.id,
     name: selectedPrduct.name,
     product_thumb: selectedPrduct.mainPictures?.[0] ?? selectedPrduct.picture,
-    spec_list: (selectedPrduct.specs ?? []).map((v) => {
-      const specKey = v.specName || v.name
-      const selectableValues = inStockValues[specKey] || new Set()
-      return {
-        name: specKey,
-        list: v.values
-          .filter((val: any) => selectableValues.has(val.valueName || val.name))
-          .map((val: any) => ({ name: val.valueName || val.name, ...val })),
-      }
-    }),
+    spec_list: specList,
     sku_list: inStockSkus.map((v) => {
+      // 按 spec_list 顺序构建 sku_name_arr，通过 specId 匹配
+      const specValueMap: Record<string, string> = {}
+      v.specs.forEach((sp: any) => {
+        const key = sp.specId || ''
+        if (key) specValueMap[key] = sp.valueName
+      })
+      // spec_list 的 spec 对应 selectedPrduct.specs 同位置元素，取其 specId 做匹配
+      const skuNameArr = (selectedPrduct.specs ?? []).map((specGroup: any) => {
+        const sid = specGroup.specId || ''
+        return specValueMap[sid] || ''
+      })
       return {
         _id: v.id,
         goods_id: selectedPrduct.id,
@@ -115,7 +125,7 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
         image: v.picture,
         price: v.price * 100,
         stock: v.inventory,
-        sku_name_arr: v.specs.map((vv) => vv.valueName),
+        sku_name_arr: skuNameArr,
       }
     }),
   }
