@@ -1,3 +1,5 @@
+import type { SkuSpecItem } from './product'
+
 /** 购物车类型 */
 export type CartItem = {
   /** 商品 ID */
@@ -20,6 +22,8 @@ export type CartItem = {
   selected: boolean
   /** 属性文字 */
   attrsText: string
+  /** 规格列表 */
+  specs: SkuSpecItem[]
   /** 是否为有效商品 */
   isEffective: boolean
 }

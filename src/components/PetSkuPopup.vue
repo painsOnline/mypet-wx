@@ -49,6 +49,8 @@ const mode = ref<SkuMode>(SkuMode.Cart)
 
 // 打开SKU弹窗修改按钮模式
 const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.Both) => {
+  console.log('[PetSkuPopup] openSkuPopup, mode=', btnMode)
+  console.log('[PetSkuPopup] selectedPrduct:', JSON.stringify(selectedPrduct))
   const memberStore = useMemberStore()
   if (!memberStore.profile?.token) {
     uni.navigateTo({ url: '/pages/login/login' })
@@ -57,6 +59,7 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
   currentProduct.value = selectedPrduct
   const skus = selectedPrduct.skus ?? []
   const inStockSkus = skus.filter((v) => v.inventory > 0)
+  console.log('[PetSkuPopup] skus count:', skus.length, 'inStockSkus:', inStockSkus.length)
 
   // 只有一个SKU → 根据模式决定是否弹窗（Both模式始终弹窗供详情页选择）
   if (inStockSkus.length === 1 && skus.length === 1 && btnMode !== SkuMode.Both) {
@@ -70,6 +73,7 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
         picture: onlySku.picture || selectedPrduct.mainPictures?.[0] || selectedPrduct.picture,
         count: 1, price: onlySku.oldPrice, nowPrice: onlySku.price,
         stock: onlySku.inventory, selected: true, attrsText: specNames, isEffective: true,
+        specs: onlySku.specs,
       }
       emit('add-to-cart', cartItem)
       uni.showToast({ title: '已加入购物车' })
@@ -87,6 +91,7 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
     })
   })
 
+  console.log('[PetSkuPopup] inStockValues:', JSON.stringify(Object.fromEntries(Object.entries(inStockValues).map(([k,v]) => [k, [...v]]))))
   // SKU组件所需格式（只显示有库存可选的规格值）
   selectedProduct.value = {
     _id: selectedPrduct.id,
@@ -97,7 +102,9 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
       const selectableValues = inStockValues[specKey] || new Set()
       return {
         name: specKey,
-        list: v.values.filter((val: any) => selectableValues.has(val.valueName || val.name)),
+        list: v.values
+          .filter((val: any) => selectableValues.has(val.valueName || val.name))
+          .map((val: any) => ({ name: val.valueName || val.name, ...val })),
       }
     }),
     sku_list: inStockSkus.map((v) => {
@@ -112,6 +119,7 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
       }
     }),
   }
+  console.log('[PetSkuPopup] selectedProduct:', JSON.stringify(selectedProduct.value))
   mode.value = btnMode
   isShowSku.value = true
 }
@@ -126,7 +134,9 @@ const emit = defineEmits<{
 
 // 加入购物车事件
 const onAddCart = (selectShop: any) => {
+  console.log('[PetSkuPopup] onAddCart selectShop:', JSON.stringify(selectShop))
   const sku = currentProduct.value?.skus?.find((s: any) => s.id === selectShop._id)
+  console.log('[PetSkuPopup] onAddCart found sku:', sku ? sku.id : 'NOT FOUND')
   const oldPrice = sku?.oldPrice ?? selectShop.price / 100 * 1.1
 
   const cartItem: CartItem = {
@@ -141,6 +151,7 @@ const onAddCart = (selectShop: any) => {
     selected: true,
     attrsText: selectShop.sku_name_arr?.join(' ') || '',
     isEffective: true,
+    specs: sku?.specs || [],
   }
 
   emit('add-to-cart', cartItem)
