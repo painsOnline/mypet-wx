@@ -88,7 +88,7 @@ const isTriggered = ref(false)
 
 // 分页参数
 const page = ref(1)
-const pageSize = 5
+const pageSize = 6
 
 //sku弹窗
 const skuPopRef = ref()

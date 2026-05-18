@@ -56,6 +56,9 @@ page {
 }
 /* 二级分类 */
 .productList {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
   background-color: #fff;
   padding-right: 0;
   box-sizing: border-box;
@@ -80,70 +83,70 @@ page {
   }
 
   .productItem {
-		display: flex;
-		flex-direction: row;
-		padding: 30rpx 20rpx 30rpx 0;
+    display: flex;
+    flex-direction: row;
+    padding: 30rpx 20rpx 30rpx 0;
     flex-wrap: wrap;
     overflow: hidden;
-	}
+  }
 
-	.productItem .productImg {
-		height: 180rpx;
-		width: 180rpx;
-		margin: 10rpx 20rpx 0rpx 10rpx;
-	}
+  .productItem .productImg {
+    height: 180rpx;
+    width: 180rpx;
+    margin: 10rpx 20rpx 0rpx 10rpx;
+  }
 
-	.productItem .productInfo {
+  .productItem .productInfo {
     flex: 1;
-      min-width: 0;
-	}
+    min-width: 0;
+  }
 
-	.productInfo .productName{
-		font-size: 28rpx;
-		color: #000;
-		/* 字体加粗 */
-		font-weight: 500;
-		margin-bottom: 10rpx;
-		word-break: break-all;
-	}
+  .productInfo .productName{
+    font-size: 28rpx;
+    color: #000;
+    /* 字体加粗 */
+    font-weight: 500;
+    margin-bottom: 10rpx;
+    word-break: break-all;
+  }
 
-	.productInfo .productAttr {
-		font-size: 24rpx;
-		color: #C8C8C8;
-		margin-bottom: 15rpx;
-	}
+  .productInfo .productAttr {
+    font-size: 24rpx;
+    color: #C8C8C8;
+    margin-bottom: 15rpx;
+  }
 
-	.productInfo .productImportBox {
-		flex-direction: row;
-		align-items: center;
-		justify-content: space-between;
-	}
+  .productInfo .productImportBox {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-	.productPrice {
-		flex: 1;
+  .productPrice {
+    flex: 1;
     min-width: 0;
     float: left;
-	}
+  }
 
-	.productPrice .nowPrice {
-		font-size: 28rpx;
-		color: #FE3D2D;
-	}
+  .productPrice .nowPrice {
+    font-size: 28rpx;
+    color: #FE3D2D;
+  }
 
-	.oldPrice {
-		font-size: 24rpx;
-		color: #6a7076;
-		/* 中间划线 */
-		text-decoration: line-through;
-	}
+  .oldPrice {
+    font-size: 24rpx;
+    color: #6a7076;
+    /* 中间划线 */
+    text-decoration: line-through;
+  }
 
-	.loading-text {
-		padding: 30rpx 0;
-		text-align: center;
-		font-size: 24rpx;
-		color: #bbb;
-		margin-top: auto;
-	}
+  .loading-text {
+    padding: 30rpx 0;
+    text-align: center;
+    font-size: 24rpx;
+    color: #bbb;
+    margin-top: auto;
+  }
 
   .opCart {
     display: block;
