@@ -28,16 +28,25 @@ export type ProductDetail = {
 export type Details = {
   /** 商品规格集合[ 展示类规格 ] */
   properties: DetailsPropertyItem[]
+  /** 详情图片 */
+  pictures: string[]
   /** 商品详情 */
   detail: string
 }
 
-/** 属性信息 */
+/** 属性信息 (WX-API.md 2.2) */
 export type DetailsPropertyItem = {
-  /** 属性名称 */
-  name: string
-  /** 属性值 */
-  value: string
+  /** 值ID */
+  valueId: string
+  /** 规格值显示名 */
+  valueName: string
+  /** 规格ID */
+  specId: string
+  /** 规格名称 */
+  specName: string
+  /** 兼容旧字段 */
+  name?: string
+  value?: string
 }
 
 /** sku信息 */
@@ -52,8 +61,6 @@ export type SkuItem = {
   picture: string
   /** sku 当前价 */
   price: number
-  /** sku 编码 */
-  skuCode: string
   /** 规格集合[ 规格信息 ] */
   specs: SkuSpecItem[]
 }

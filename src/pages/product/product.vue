@@ -143,9 +143,9 @@ const detailHtml = computed(() => {
       <view class="content">
         <view class="properties">
           <!-- 属性详情 -->
-          <view class="item" v-for="item in product?.details.properties" :key="item.name">
-            <text class="label">{{ item.name }}</text>
-            <text class="value">{{ item.value }}</text>
+          <view class="item" v-for="item in product?.details.properties" :key="item.specId">
+            <text class="label">{{ item.specName }}</text>
+            <text class="value">{{ item.valueName }}</text>
           </view>
         </view>
         <!-- 图片详情 -->
