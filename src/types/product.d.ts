@@ -58,30 +58,46 @@ export type SkuItem = {
   specs: SkuSpecItem[]
 }
 
-/** 规格信息 */
+/** 规格信息 (WX-API.md 2.2) */
 export type SkuSpecItem = {
   /** 规格名称 */
-  name: string
+  specName: string
   /** 可选值名称 */
   valueName: string
+  /** 规格ID */
+  specId: string
+  /** 值ID */
+  valueId: string
+  /** 兼容旧字段 */
+  name?: string
 }
 
-/** 可选规格信息 */
+/** 可选规格信息 (WX-API.md 2.2) */
 export type SpecItem = {
   /** 规格名称 */
-  name: string
+  specName: string
+  /** 规格ID */
+  specId: string
+  /** 排序 */
+  sort: number
+  /** 输入类型 */
+  inputType: string
   /** 可选值集合[ 可选值信息 ] */
   values: SpecValueItem[]
+  /** 兼容旧字段 */
+  name?: string
 }
 
-/** 可选值信息 */
+/** 可选值信息 (WX-API.md 2.2) */
 export type SpecValueItem = {
   /** 是否可售 */
   available: boolean
-  /** 可选值备注 */
-  desc: string
   /** 可选值名称 */
-  name: string
+  valueName: string
+  /** 值ID */
+  valueId: string
   /** 可选值图片链接 */
   picture: string
+  /** 兼容旧字段 */
+  name?: string
 }

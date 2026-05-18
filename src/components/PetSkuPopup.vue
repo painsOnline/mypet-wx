@@ -81,8 +81,9 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
   const inStockValues: Record<string, Set<string>> = {}
   inStockSkus.forEach((sku) => {
     sku.specs.forEach((sp) => {
-      if (!inStockValues[sp.name]) inStockValues[sp.name] = new Set()
-      inStockValues[sp.name].add(sp.valueName)
+      const specKey = sp.specName || sp.name
+      if (!inStockValues[specKey]) inStockValues[specKey] = new Set()
+      inStockValues[specKey].add(sp.valueName)
     })
   })
 
@@ -92,10 +93,11 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
     name: selectedPrduct.name,
     product_thumb: selectedPrduct.mainPictures?.[0] ?? selectedPrduct.picture,
     spec_list: (selectedPrduct.specs ?? []).map((v) => {
-      const selectableValues = inStockValues[v.name] || new Set()
+      const specKey = v.specName || v.name
+      const selectableValues = inStockValues[specKey] || new Set()
       return {
-        name: v.name,
-        list: v.values.filter((val: any) => selectableValues.has(val.name)),
+        name: specKey,
+        list: v.values.filter((val: any) => selectableValues.has(val.valueName || val.name)),
       }
     }),
     sku_list: inStockSkus.map((v) => {
