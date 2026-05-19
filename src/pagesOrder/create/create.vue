@@ -117,7 +117,7 @@ const onOrderSubmit = async () => {
         <image class="picture" :src="item.picture" />
         <view class="meta">
           <view class="name ellipsis"> {{ item.name }} </view>
-          <view class="attrs">{{ item.attrsText }}</view>
+          <view class="attrs">{{ item.specs?.map(s => `${s.specName || ''}:${s.valueName || ''}`).join(' ') }}</view>
           <view class="prices">
             <view class="pay-price symbol">{{ item.payPrice }}</view>
             <view class="price symbol">{{ item.price }}</view>
