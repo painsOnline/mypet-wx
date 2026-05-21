@@ -12,6 +12,7 @@
 
 import { useMemberStore } from '@/stores'
 import type { DataResult } from '@/types/global'
+import { appendShopParam } from '@/utils/shop'
 
 // Vite 环境变量（编译时静态替换）
 // 开发: .env.development → http://localhost:8080
@@ -33,10 +34,14 @@ const httpInterceptor = {
     options.timeout = 60000
     // 3. 添加小程序端请求头标识 + 租户信息
     const memberStore = useMemberStore()
+    const shopCode = uni.getStorageSync('shopCode') || ''
     options.header = {
       ...options.header,
       'source-client': 'miniapp',
-      Tenant: 'xlong',
+    }
+    // 仅在已选择店铺时发送 Tenant header
+    if (shopCode) {
+      options.header.Tenant = shopCode
     }
     // 4. 添加 token 请求头标识
     const token = memberStore.profile?.token
@@ -66,12 +71,20 @@ export const http = <T>(options: UniApp.RequestOptions) => {
         } else if (res.statusCode === 401) {
           const memberStore = useMemberStore()
           memberStore.clearProfile()
-          uni.navigateTo({ url: '/pages/login/login' })
+          uni.navigateTo({ url: appendShopParam('/pages/login/login') })
           reject(res)
         } else {
+          const msg = (res.data as DataResult<T>).msg || ''
+          // 缺少租户信息 → 清除本地数据，跳转店铺选择页
+          if (msg.includes('Missing required header: Tenant')) {
+            uni.removeStorageSync('shopCode')
+            uni.reLaunch({ url: '/pages/shop/shop' })
+            reject(res)
+            return
+          }
           uni.showToast({
             icon: 'none',
-            title: (res.data as DataResult<T>).msg || '请求错误',
+            title: msg || '请求错误',
           })
           reject(res)
         }

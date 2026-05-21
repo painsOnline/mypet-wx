@@ -9,6 +9,7 @@ import { useCartStore } from '@/stores'
 import type { OrderPreResult } from '@/types/order'
 import { onLoad } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
+import { appendShopParam, getShopCode } from '@/utils/shop'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -78,7 +79,7 @@ const onOrderSubmit = async () => {
   const cartStore = useCartStore()
   cartStore.clearMemberLocalCart()
   // 关闭当前页面，跳转到订单详情，传递订单id
-  uni.redirectTo({ url: `/pagesOrder/detail/detail?orderNo=${res.result.orderNo}` })
+  uni.redirectTo({ url: appendShopParam(`/pagesOrder/detail/detail?orderNo=${res.result.orderNo}`) })
 }
 </script>
 
@@ -89,7 +90,7 @@ const onOrderSubmit = async () => {
       v-if="selecteAddress"
       class="shipment"
       hover-class="none"
-      url="/pagesMember/address/address?from=order"
+      :url="`/pagesMember/address/address?from=order&shop=${getShopCode()}`"
     >
       <view class="user"> {{ selecteAddress.receiver }} {{ selecteAddress.contact }} </view>
       <view class="address"> {{ selecteAddress.fullLocation }} {{ selecteAddress.address }} </view>
@@ -99,7 +100,7 @@ const onOrderSubmit = async () => {
       v-else
       class="shipment"
       hover-class="none"
-      url="/pagesMember/address/address?from=order"
+      :url="`/pagesMember/address/address?from=order&shop=${getShopCode()}`"
     >
       <view class="address"> 请选择收货地址 </view>
       <text class="icon icon-right"></text>
@@ -110,7 +111,7 @@ const onOrderSubmit = async () => {
       <navigator
         v-for="item in orderPre?.products"
         :key="item.skuId"
-        :url="`/pages/goods/goods?id=${item.id}`"
+        :url="`/pages/goods/goods?id=${item.id}&shop=${getShopCode()}`"
         class="item"
         hover-class="none"
       >

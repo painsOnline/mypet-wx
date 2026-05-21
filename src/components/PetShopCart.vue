@@ -4,6 +4,7 @@ import type { CartItem } from '@/types/cart'
 import { getMemberCartAPI, resetMemberCartAPI } from '@/services/cart'
 import { useMemberStore, useCartStore } from '@/stores'
 import { useShopStore } from '@/stores/modules/shop'
+import { appendShopParam } from '@/utils/shop'
 
 const props = defineProps<{
   buyType?: string
@@ -168,7 +169,7 @@ const buyList = async () => {
     return
   }
   await resetMemberCartAPI([...cartStore.getMemberLocalCart().values()])
-  uni.navigateTo({ url: '/pagesOrder/create/create' })
+  uni.navigateTo({ url: appendShopParam('/pagesOrder/create/create') })
 }
 
 const addCart = (item: CartItem) => {

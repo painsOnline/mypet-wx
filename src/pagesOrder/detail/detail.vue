@@ -26,7 +26,7 @@
             class="navigator"
             v-for="item in order.skus"
             :key="item.id"
-            :url="`/pages/goods/goods?id=${item.productId}`"
+            :url="`/pages/goods/goods?id=${item.productId}&shop=${getShopCode()}`"
             hover-class="none"
           >
             <image class="cover" :src="item.picture"></image>
@@ -137,6 +137,7 @@ import {
 import type { OrderDetail } from '@/types/order'
 import { onLoad, onReady } from '@dcloudio/uni-app'
 import { ref } from 'vue'
+import { getShopCode } from '@/utils/shop'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()

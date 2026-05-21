@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { SkuMode} from '@/enums/product'
 import type { ProductDetail } from '@/types/product'
+import { getShopCode } from '@/utils/shop'
 
 const skuPopRef = ref()
 
@@ -38,7 +39,7 @@ defineProps<{
         class="product"
         open-type="navigate"
         hover-class="none"
-        :url="`/pages/product/product?id=${product.id}`"
+        :url="`/pages/product/product?id=${product.id}&shop=${getShopCode()}`"
       >
         <image class="image" :src="product.picture"></image>
         <view class="name ellipsis">{{ product.name }}</view>

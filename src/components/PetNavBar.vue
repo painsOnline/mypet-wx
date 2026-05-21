@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useShopStore } from '@/stores/modules/shop'
+import { getShopCode } from '@/utils/shop'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -25,7 +26,7 @@ console.log('currentPage:', currentPage)
       <text class="logo-text">正品保证 小时达</text>
     </view>
     <!-- 搜索条 -->
-    <navigator url="/pages/search/search" open-type="navigate" animation-type="none" animation-duration="0" hover-class="none" class="search">
+    <navigator :url="`/pages/search/search?shop=${getShopCode()}`" open-type="navigate" animation-type="none" animation-duration="0" hover-class="none" class="search">
       <text class="icon-search">搜索商品</text>
       <text class="icon-scan"></text>
     </navigator>
@@ -35,7 +36,7 @@ console.log('currentPage:', currentPage)
         v-for="(item, index) in navItems"
         :key="index"
         :class="['icon-page-nav', { 'page-active': currentPage === item.url }]"
-        :url="'/'+ (item.url || undefined)"
+        :url="`/${item.url}?shop=${getShopCode()}`"
         open-type="redirect"
         hover-class="none"
       >

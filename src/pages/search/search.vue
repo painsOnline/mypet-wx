@@ -58,7 +58,7 @@
             :key="product.id"
             class="product-item"
             hover-class="none"
-            :url="`/pages/product/product?id=${product.id}`"
+            :url="`/pages/product/product?id=${product.id}&shop=${getShopCode()}`"
           >
             <image class="product-img" :src="product.picture" />
             <view class="product-info">
@@ -88,6 +88,7 @@ import { ref, computed, onMounted } from 'vue'
 import { SkuMode } from '@/enums/product'
 import { getSearchAPI } from '@/services/search'
 import type { ProductDetail } from '@/types/product'
+import { getShopCode } from '@/utils/shop'
 
 const mounted = ref(false)
 const { safeAreaInsets } = uni.getSystemInfoSync()

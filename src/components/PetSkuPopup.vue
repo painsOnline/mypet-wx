@@ -29,6 +29,7 @@ import type { ProductDetail } from '@/types/product'
 import type { CartItem } from '@/types/cart'
 import { useMemberStore } from '@/stores'
 import { useShopStore } from '@/stores/modules/shop'
+import { appendShopParam } from '@/utils/shop'
 
 // SKU组件实例
 const skuPopupRef = ref()
@@ -53,7 +54,7 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
   console.log('[PetSkuPopup] selectedPrduct:', JSON.stringify(selectedPrduct))
   const memberStore = useMemberStore()
   if (!memberStore.profile?.token) {
-    uni.navigateTo({ url: '/pages/login/login' })
+    uni.navigateTo({ url: appendShopParam('/pages/login/login') })
     return
   }
   currentProduct.value = selectedPrduct
@@ -181,7 +182,7 @@ function checkAndBuy(onlySku?: any) {
       uni.showToast({ icon: 'none', title: `订单金额需满${freeShippingAmount.value}元起配` })
       return
     }
-    uni.navigateTo({ url: `/pagesOrder/create/create?skuId=${sku.id}&count=1` })
+    uni.navigateTo({ url: appendShopParam(`/pagesOrder/create/create?skuId=${sku.id}&count=1`) })
     return
   }
 }
@@ -194,7 +195,7 @@ const onBuyNow = (selectShop: any) => {
     uni.showToast({ icon: 'none', title: `订单金额需满${freeShippingAmount.value}元起配` })
     return
   }
-  uni.navigateTo({ url: `/pagesOrder/create/create?skuId=${selectShop._id}&count=${selectShop.buy_num}` })
+  uni.navigateTo({ url: appendShopParam(`/pagesOrder/create/create?skuId=${selectShop._id}&count=${selectShop.buy_num}`) })
   isShowSku.value = false
 }
 

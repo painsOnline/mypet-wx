@@ -5,7 +5,7 @@
     <view class="myNavTitle">我的订单</view>
     <view class="myNavItem">
       <navigator
-        url="/pagesOrder/list/list?type=0"
+        :url="`/pagesOrder/list/list?type=0&shop=${getShopCode()}`"
         open-type="navigate"
         hover-class="none"
         class="myOrderNavItem"
@@ -17,7 +17,7 @@
         <text>全部订单</text>
       </navigator>
       <navigator
-        url="/pagesOrder/list/list?type=2"
+        :url="`/pagesOrder/list/list?type=2&shop=${getShopCode()}`"
         open-type="navigate"
         hover-class="none"
         class="myOrderNavItem"
@@ -29,7 +29,7 @@
         <text>配送中</text>
       </navigator>
       <navigator
-        url="/pagesOrder/list/list?type=4"
+        :url="`/pagesOrder/list/list?type=4&shop=${getShopCode()}`"
         open-type="navigate"
         hover-class="none"
         class="myOrderNavItem"
@@ -41,7 +41,7 @@
         <text>已完成</text>
       </navigator>
       <navigator
-        url="/pagesOrder/list/list?type=5"
+        :url="`/pagesOrder/list/list?type=5&shop=${getShopCode()}`"
         open-type="navigate"
         hover-class="none"
         class="myOrderNavItem"
@@ -58,7 +58,7 @@
     <view class="myNavTitle">更多功能</view>
     <view class="myNavItem">
       <navigator
-        url="/pages/order?type=all"
+        :url="`/pages/order?type=all&shop=${getShopCode()}`"
         open-type="navigate"
         hover-class="none"
         class="myOrderNavItem"
@@ -70,7 +70,7 @@
         <text>收藏</text>
       </navigator>
       <navigator
-        url="/pagesMember/address/address"
+        :url="`/pagesMember/address/address?shop=${getShopCode()}`"
         open-type="navigate"
         hover-class="none"
         class="myOrderNavItem"
@@ -96,11 +96,12 @@
 import { onShow } from '@dcloudio/uni-app'
 import PetNavBar from '@/components/PetNavBar.vue';
 import { useMemberStore } from '@/stores'
+import { appendShopParam, getShopCode } from '@/utils/shop'
 
 onShow(() => {
   const memberStore = useMemberStore()
   if (!memberStore.profile?.token) {
-    uni.navigateTo({ url: '/pages/login/login' })
+    uni.navigateTo({ url: appendShopParam('/pages/login/login') })
   }
 })
 
@@ -113,7 +114,7 @@ const onLogout = () => {
         const memberStore = useMemberStore()
         memberStore.clearProfile()
         uni.showToast({ icon: 'success', title: '退出成功' })
-        uni.reLaunch({ url: '/pages/index/index' })
+        uni.reLaunch({ url: appendShopParam('/pages/index/index') })
       }
     },
   })

@@ -31,7 +31,7 @@
               :key="product.id"
               class="productItem"
               hover-class="none"
-              :url="`/pages/product/product?id=${product.id}`"
+              :url="`/pages/product/product?id=${product.id}&shop=${getShopCode()}`"
             >
               <image class="productImg" :src="product.picture"></image>
               <view class="productInfo">
@@ -67,6 +67,7 @@ import type { ProductDetail } from '@/types/product'
 import PetNavBar from '@/components/PetNavBar.vue';
 import { SkuMode} from '@/enums/product'
 import { getCategoryListAPI, getProductsByCategoryIdAPI } from '@/services/category'
+import { getShopCode } from '@/utils/shop'
 
 // 获取分类列表数据
 const categoryList = ref<CategoryItem[]>([])

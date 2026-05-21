@@ -5,6 +5,7 @@ import type { OrderItem, OrderListParams } from '@/types/order'
 import { OrderState } from '@/enums/order'
 import { orderStateList } from '@/constants/order'
 import {getMemberOrderAPI, putMemberOrderReceiptByNoAPI, deleteMemberOrderByNoAPI, cancelMemberOrderByNoAPI} from '@/services/order'
+import { getShopCode } from '@/utils/shop'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
@@ -154,7 +155,7 @@ const onRefresherrefresh = async () => {
         v-for="item in order.skus"
         :key="item.id"
         class="goods"
-        :url="`/pagesOrder/detail/detail?orderNo=${order.orderNo}`"
+        :url="`/pagesOrder/detail/detail?orderNo=${order.orderNo}&shop=${getShopCode()}`"
         open-type="navigate"
         hover-class="none"
       >
@@ -189,7 +190,7 @@ const onRefresherrefresh = async () => {
         <template v-if="order.orderState === OrderState.Completed">
           <navigator
             class="button secondary"
-            :url="`/pagesOrder/create/create?orderNo=${order.orderNo}`"
+            :url="`/pagesOrder/create/create?orderNo=${order.orderNo}&shop=${getShopCode()}`"
             hover-class="none"
           >
             再次购买

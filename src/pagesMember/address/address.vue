@@ -4,6 +4,7 @@ import { useAddressStore } from '@/stores/modules/address'
 import type { AddressItem } from '@/types/address'
 import { onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
+import { getShopCode } from '@/utils/shop'
 
 // 获取收货地址列表数据
 const addressList = ref<AddressItem[]>([])
@@ -63,7 +64,7 @@ const onChangeAddress = (item: AddressItem) => {
               <navigator
                 class="edit"
                 hover-class="none"
-                :url="`/pagesMember/address-form/address-form?id=${item.id}`"
+                :url="`/pagesMember/address-form/address-form?id=${item.id}&shop=${getShopCode()}`"
                 @tap.stop="() => {}"
                 @tap.prevent="() => {}"
               >
@@ -81,7 +82,7 @@ const onChangeAddress = (item: AddressItem) => {
     </scroll-view>
     <!-- 添加按钮 -->
     <view class="add-btn">
-      <navigator open-type="navigate" hover-class="none" url="/pagesMember/address-form/address-form">
+      <navigator open-type="navigate" hover-class="none" :url="`/pagesMember/address-form/address-form?shop=${getShopCode()}`">
         新建地址
       </navigator>
     </view>
