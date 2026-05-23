@@ -15,9 +15,7 @@ interface ShopValidateResult {
  */
 async function validateShopCode(code: string): Promise<ShopValidateResult> {
   try {
-    const baseURL = import.meta.env.MODE === 'production'
-      ? (import.meta.env.VITE_API_BASE_URL || 'https://app.xinqianmao.com:8080')
-      : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080')
+    const baseURL = import.meta.env.VITE_API_BASE_URL
     const res = await uni.request({
       url: baseURL + '/frontend/shop/validate?code=' + encodeURIComponent(code),
       header: { 'source-client': 'miniapp' },

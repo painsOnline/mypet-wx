@@ -18,9 +18,7 @@ import { appendShopParam } from '@/utils/shop'
 // 开发: .env.development → http://localhost:8080
 // 生产: .env.production  → https://app.xinqianmao.com:8080
 // 生产模式下禁止回退到 localhost
-const baseURL = import.meta.env.MODE === 'production'
-  ? (import.meta.env.VITE_API_BASE_URL || 'https://app.xinqianmao.com:8080')
-  : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080')
+const baseURL = import.meta.env.VITE_API_BASE_URL
 
 // 添加拦截器
 const httpInterceptor = {

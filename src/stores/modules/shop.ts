@@ -32,6 +32,8 @@ function setCache(data: ShopDetail) {
 
 async function fetchShop() {
   const currentCode = uni.getStorageSync('shopCode') || ''
+  // No shop selected yet — don't fetch
+  if (!currentCode) return null
   // Shop changed → reset and re-fetch
   if (currentCode !== lastShopCode) {
     shopData.value = null
