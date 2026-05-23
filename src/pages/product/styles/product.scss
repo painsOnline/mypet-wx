@@ -255,18 +255,19 @@ page {
       border-radius: 72rpx;
     }
     .addcart {
-      background-color: #353638;
+      background: linear-gradient(135deg, #4A4A4A, #5C5C5C);
     }
     .payment {
-      background-color: #FEE53F;
-      color: #333;
+      background: linear-gradient(135deg, #FF8833, #FFA751);
+      color: #FFF;
       margin-left: 20rpx;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       &--disabled {
-        background-color: #e0e0e0;
+        background: #e8e8e8;
+        color: #aaa;
       }
       &-text {
         font-size: 26rpx;
@@ -282,29 +283,37 @@ page {
     }
   }
   .icons {
-    padding-right: 20rpx;
+    padding-right: 16rpx;
     display: flex;
     align-items: center;
     flex: 1;
-    // 兼容 H5 端和 App 端的导航链接样式
-    .navigator-wrap,
+    gap: 4rpx;
     .icons-button {
       flex: 1;
-      text-align: center;
-      line-height: 1.4;
-      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6rpx 0;
       margin: 0;
-      border-radius: 0;
+      border-radius: 16rpx;
       font-size: 20rpx;
-      color: #333;
-      background-color: #fff;
-      &::after {
-        border: none;
+      color: #666;
+      background: #FFF;
+      line-height: 1;
+      transition: background 0.2s;
+      &::after { border: none; }
+      .btn-icon {
+        width: 44rpx;
+        height: 44rpx;
+        margin-bottom: 4rpx;
       }
-    }
-    text {
-      display: block;
-      font-size: 34rpx;
+      text {
+        display: block;
+        font-size: 22rpx;
+        color: #666;
+        line-height: 1;
+      }
     }
   }
 }

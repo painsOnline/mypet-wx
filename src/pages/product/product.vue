@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onShareAppMessage } from '@dcloudio/uni-app'
 import PetSkuPopup from '@/components/PetSkuPopup.vue'
 import { getProductByIdAPI } from '@/services/product'
 import type { ProductDetail } from '@/types/product'
 import { SkuMode} from '@/enums/product'
 import { useShopStore } from '@/stores/modules/shop'
+import { getShopCode } from '@/utils/shop'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -86,6 +87,15 @@ const detailHtml = computed(() => {
       .replace('<img ', '<img style="max-width:100%;height:auto;display:block" ')
   })
   return `<div style="width:100%;overflow:hidden;word-break:break-all">${html}</div>`
+})
+
+// 微信分享
+onShareAppMessage(() => {
+  return {
+    title: product.value?.name || '宠物用品',
+    path: `/pages/product/product?id=${query.id}&shop=${getShopCode()}`,
+    imageUrl: product.value?.mainPictures?.[0] || '',
+  }
 })
 
 </script>
@@ -169,10 +179,13 @@ const detailHtml = computed(() => {
   <!-- 用户操作 -->
   <view v-if="product" class="toolbar" :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }">
     <view class="icons">
-      <button class="icons-button"><text class="icon-heart"></text>收藏</button>
+      <button class="icons-button" open-type="share">
+        <image class="btn-icon" src="/static/images/share.png" mode="aspectFit" />
+        <text>分享</text>
+      </button>
       <view class="icons-button" @click="toggleCartVisible">
-        <text class="icon-cart">
-        </text>购物车
+        <image class="btn-icon" src="/static/images/cart.png" mode="aspectFit" />
+        <text>购物车</text>
       </view>
     </view>
     <view class="buttons">

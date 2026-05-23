@@ -1,35 +1,48 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useShopStore } from '@/stores/modules/shop'
 import { getShopCode } from '@/utils/shop'
 
-// 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const { shopData, fetchShop } = useShopStore()
 fetchShop()
 
-// 导航项配置
 const navItems = [
   { label: '首页', url: 'pages/index/index' },
   { label: '全部商品', url: 'pages/category/category' },
   { label: '我的', url: 'pages/my/my' },
 ]
 
-// 获取当前页面路径
 const currentPage = getCurrentPages().pop()?.route || ''
-console.log('currentPage:', currentPage)
+
+// page-container visibility
+const showDetail = ref(false)
+function openDetail() { showDetail.value = true }
+function closeDetail() { showDetail.value = false }
 </script>
+
 <template>
-  <view class="navbar" :style="{ paddingTop: safeAreaInsets!.top + 10 + 'px' }">
-    <!-- logo文字 -->
-    <view class="logo">
-      <image v-if="shopData?.logo" class="logo-image" :src="shopData!.logo"></image>
-      <text class="logo-text">正品保证 小时达</text>
+  <view class="navbar" :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
+    <!-- Header: logo + info, click to open shop detail -->
+    <view class="shop-header" @tap="openDetail">
+      <view class="logo-wrap">
+        <image v-if="shopData?.logo" class="shop-logo" :src="shopData!.logo" mode="aspectFill" />
+        <image v-else class="shop-logo" src="/static/images/shop_icon.png" mode="aspectFill" />
+      </view>
+      <view class="shop-info">
+        <text class="shop-name">{{ shopData?.name || '宠物用品' }}</text>
+        <view class="shop-tags">
+          <text class="tag tag-delivery">小区业主急送</text>
+          <text class="tag tag-quality">正品保障</text>
+        </view>
+      </view>
     </view>
+
     <!-- 搜索条 -->
     <navigator :url="`/pages/search/search?shop=${getShopCode()}`" open-type="navigate" animation-type="none" animation-duration="0" hover-class="none" class="search">
       <text class="icon-search">搜索商品</text>
-      <text class="icon-scan"></text>
     </navigator>
+
     <!-- 导航栏 -->
     <view class="pageNav">
       <navigator
@@ -44,132 +57,192 @@ console.log('currentPage:', currentPage)
       </navigator>
     </view>
   </view>
+
+  <!-- 店铺详情弹窗 -->
+  <page-container :show="showDetail" :overlay="true" position="bottom" :round="true" @beforeleave="closeDetail">
+    <view class="detail-popup">
+      <view class="detail-header">
+        <text class="detail-title">店铺详情</text>
+        <text class="detail-close" @tap="closeDetail">✕</text>
+      </view>
+      <scroll-view scroll-y class="detail-body" v-if="shopData?.detail">
+        <rich-text :nodes="shopData.detail" />
+      </scroll-view>
+      <view v-else class="detail-empty">
+        <text>暂无店铺详情</text>
+      </view>
+    </view>
+  </page-container>
 </template>
 
 <style lang="scss">
-/* 自定义导航条 */
 .navbar {
   background:
-    radial-gradient(ellipse 18rpx 22rpx at 12% 72%, rgba(255,255,255,0.22), transparent),
-    radial-gradient(ellipse 7rpx 9rpx at 7% 62%, rgba(255,255,255,0.2), transparent),
-      radial-gradient(ellipse 7rpx 9rpx at 12% 57%, rgba(255,255,255,0.2), transparent),
-      radial-gradient(ellipse 7rpx 9rpx at 17% 60%, rgba(255,255,255,0.18), transparent),
-      /* 猫爪2 */
-      radial-gradient(ellipse 16rpx 20rpx at 82% 55%, rgba(255,255,255,0.22), transparent),
-      radial-gradient(ellipse 6rpx 8rpx at 77% 46%, rgba(255,255,255,0.2), transparent),
-      radial-gradient(ellipse 6rpx 8rpx at 82% 42%, rgba(255,255,255,0.2), transparent),
-      radial-gradient(ellipse 6rpx 8rpx at 87% 44%, rgba(255,255,255,0.18), transparent),
-      /* 猫爪3 */
-      radial-gradient(ellipse 14rpx 18rpx at 65% 18%, rgba(255,255,255,0.2), transparent),
-      radial-gradient(ellipse 6rpx 7rpx at 59% 12%, rgba(255,255,255,0.18), transparent),
-      radial-gradient(ellipse 6rpx 7rpx at 65% 8%, rgba(255,255,255,0.18), transparent),
-      radial-gradient(ellipse 6rpx 7rpx at 71% 11%, rgba(255,255,255,0.16), transparent),
-      /* 猫爪4 */
-      radial-gradient(ellipse 20rpx 24rpx at 28% 42%, rgba(255,255,255,0.2), transparent),
-      radial-gradient(ellipse 7rpx 9rpx at 24% 33%, rgba(255,255,255,0.18), transparent),
-      radial-gradient(ellipse 7rpx 9rpx at 30% 28%, rgba(255,255,255,0.18), transparent),
-      radial-gradient(ellipse 7rpx 9rpx at 35% 31%, rgba(255,255,255,0.16), transparent),
-      radial-gradient(circle at 8% 20%, rgba(255,255,255,0.25) 7rpx, transparent 7rpx),
-    radial-gradient(circle at 15% 16%, rgba(255,255,255,0.25) 7rpx, transparent 7rpx),
-    radial-gradient(circle at 20% 22%, rgba(255,255,255,0.2) 6rpx, transparent 6rpx),
-    radial-gradient(ellipse 60rpx 35rpx at 30% 75%, rgba(255,255,255,0.05), transparent),
-    radial-gradient(circle at 72% 54%, rgba(255,255,255,0.04), transparent),
-    radial-gradient(circle at 79% 50%, rgba(255,255,255,0.04), transparent),
-    radial-gradient(circle at 84% 56%, rgba(255,255,255,0.18) 5rpx, transparent 5rpx),
-    radial-gradient(circle at 88% 28%, rgba(255,255,255,0.28) 12rpx, transparent 12rpx),
-    radial-gradient(circle at 83% 20%, rgba(255,255,255,0.2) 5rpx, transparent 5rpx),
-    radial-gradient(circle at 89% 16%, rgba(255,255,255,0.2) 5rpx, transparent 5rpx),
-    radial-gradient(circle at 35% 82%, rgba(255,255,255,0.26) 12rpx, transparent 12rpx),
-    radial-gradient(circle at 30% 74%, rgba(255,255,255,0.18) 5rpx, transparent 5rpx),
-    radial-gradient(circle at 36% 72%, rgba(255,255,255,0.18) 5rpx, transparent 5rpx),
-    radial-gradient(circle at 60% 18%, rgba(255,255,255,0.2) 9rpx, transparent 9rpx),
-    radial-gradient(circle at 48% 48%, rgba(255,255,255,0.18) 11rpx, transparent 11rpx),
-    radial-gradient(circle at 75% 60%, rgba(255,255,255,0.22) 6rpx, transparent 12rpx),
-    radial-gradient(circle at 85% 20%, rgba(255,255,255,0.25) 9rpx, transparent 6rpx),
-    radial-gradient(circle at 30% 80%, rgba(255,255,255,0.22) 14rpx, transparent 10rpx),
-    radial-gradient(circle at 55% 40%, rgba(255,255,255,0.25) 12rpx, transparent 7rpx),
-    radial-gradient(circle at 10% 55%, rgba(255,255,255,0.16) 9rpx, transparent 9rpx),
-    radial-gradient(circle at 65% 75%, rgba(255,255,255,0.11) 5rpx, transparent 5rpx),
-    radial-gradient(circle at 90% 45%, rgba(255,255,255,0.13) 11rpx, transparent 11rpx),
-    radial-gradient(circle at 45% 15%, rgba(255,255,255,0.17) 6rpx, transparent 6rpx),
-    radial-gradient(ellipse 40rpx 28rpx at 20% 70%, rgba(255,255,255,0.08), transparent),
-    radial-gradient(ellipse 32rpx 22rpx at 80% 35%, rgba(255,255,255,0.07), transparent),
-    radial-gradient(ellipse 36rpx 26rpx at 50% 90%, rgba(255,255,255,0.06), transparent),
-    linear-gradient(135deg, #FF8833 0%, #FFB84D 100%);
-  background-size: cover;
+    radial-gradient(ellipse 60rpx 80rpx at 15% 30%, rgba(255,255,255,0.18), transparent),
+    radial-gradient(ellipse 40rpx 55rpx at 78% 25%, rgba(255,255,255,0.14), transparent),
+    radial-gradient(ellipse 50rpx 65rpx at 50% 70%, rgba(255,255,255,0.10), transparent),
+    linear-gradient(150deg, #FF7A2E 0%, #FF9B45 40%, #FFB84D 100%);
   position: relative;
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
-  .logo {
+
+  .shop-header {
     display: flex;
     align-items: center;
-    height: 64rpx;
-    padding-left: 30rpx;
-    .logo-image {
-      width: 166rpx;
-      height: 39rpx;
-    }
-    .logo-text {
-      flex: 1;
-      line-height: 28rpx;
-      color: #fff;
-      margin: 2rpx 0 0 20rpx;
-      padding-left: 20rpx;
-      border-left: 1rpx solid #fff;
-      font-size: 26rpx;
+    padding: 20rpx 30rpx;
+  }
+
+  .logo-wrap {
+    flex-shrink: 0;
+    border-radius: 24rpx;
+    padding: 8rpx;
+    background: #FFF;
+    box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  }
+
+  .shop-logo {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 20rpx;
+    display: block;
+  }
+
+  .shop-info {
+    flex: 1;
+    margin-left: 24rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .shop-name {
+    font-size: 36rpx;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.3;
+    letter-spacing: 2rpx;
+  }
+
+  .shop-tags {
+    display: flex;
+    gap: 12rpx;
+    margin-top: 12rpx;
+    .tag {
+      font-size: 20rpx;
+      font-weight: 600;
+      padding: 6rpx 16rpx;
+      border-radius: 20rpx;
+      letter-spacing: 1rpx;
+      &.tag-delivery {
+        color: #FFF;
+        background: rgba(255,255,255,0.25);
+      }
+      &.tag-quality {
+        color: #FF7A2E;
+        background: rgba(255,255,255,0.9);
+        box-shadow: 0 2rpx 8rpx rgba(255,122,46,0.15);
+      }
     }
   }
+
   .search {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 10rpx 0 26rpx;
-    height: 64rpx;
-    margin: 16rpx 20rpx;
-    color: #fff;
+    padding: 0 12rpx 0 30rpx;
+    height: 68rpx;
+    margin: 8rpx 24rpx 20rpx;
+    color: #999;
     font-size: 28rpx;
-    border-radius: 32rpx;
-    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 36rpx;
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.06);
   }
+
   .icon-search {
     &::before {
       margin-right: 10rpx;
     }
   }
+
   .icon-scan {
     font-size: 30rpx;
     padding: 15rpx;
   }
 
   .pageNav {
-    background-color: #fff;
+    background: #FFF;
     height: 80rpx;
-    padding:10rpx;
+    padding: 6rpx 10rpx;
     display: flex;
+    border-radius: 24rpx 24rpx 0 0;
+    box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.04);
   }
- 
-  .icon-page-nav{
-     font-size:32rpx;
-     margin-right: 20rpx;
-     color: #C8C8C8;
-     margin: 0rpx 50rpx 0rpx 0rpx;
-  }
-  .pageNav .page-active {
-    font-weight: 400;
-    color: black;
-    text-decoration: none;
+
+  .icon-page-nav {
+    font-size: 30rpx;
+    color: #B0B0B0;
+    margin: 0 40rpx 0 10rpx;
+    padding: 4rpx 12rpx;
+    border-radius: 12rpx;
     position: relative;
+    transition: color 0.2s;
+  }
+
+  .pageNav .page-active {
+    font-weight: 600;
+    color: #FF7A2E;
+    text-decoration: none;
     &::after {
       content: '';
       position: absolute;
-      left: 0;
-      bottom: 6rpx;
-      width: 100%;
+      left: 50%;
+      bottom: -2rpx;
+      transform: translateX(-50%);
+      width: 48rpx;
       height: 8rpx;
-      border-radius: 3rpx;
-      background-color: #FF8833;
+      border-radius: 4rpx;
+      background: linear-gradient(90deg, #FF9B45, #FFB84D);
     }
   }
+}
+
+// page-container popup styles
+.detail-popup {
+  display: flex;
+  flex-direction: column;
+  height: 75vh;
+  background: #FFF;
+  border-radius: 32rpx 32rpx 0 0;
+}
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx 30rpx 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  .detail-title {
+    font-size: 34rpx;
+    font-weight: 600;
+    color: #333;
+  }
+  .detail-close {
+    font-size: 36rpx;
+    color: #999;
+    padding: 10rpx;
+  }
+}
+.detail-body {
+  flex: 1;
+  padding: 24rpx 30rpx;
+  overflow-y: auto;
+}
+.detail-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 28rpx;
 }
 </style>

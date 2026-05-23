@@ -26,6 +26,7 @@ export type ShopDetail = {
   id: string
   name: string
   logo: string
+  detail?: string
   freeShippingAmount: number
   banners: BannerItem[]
 }

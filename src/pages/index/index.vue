@@ -33,7 +33,7 @@ import { getHomeHotAPI } from '@/services/home'
 import { useShopStore } from '@/stores/modules/shop'
 
 const { windowHeight } = uni.getSystemInfoSync()
-const scrollHeight = windowHeight - 44 - 180 + 'px'
+const scrollHeight = windowHeight - 44 - 210 + 'px'
 
 const { shopData, fetchShop } = useShopStore()
 
