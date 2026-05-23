@@ -19,6 +19,11 @@ const currentPage = getCurrentPages().pop()?.route || ''
 const showDetail = ref(false)
 function openDetail() { showDetail.value = true }
 function closeDetail() { showDetail.value = false }
+function callContact() {
+  if (shopData.value?.contact) {
+    uni.makePhoneCall({ phoneNumber: shopData.value.contact })
+  }
+}
 </script>
 
 <template>
@@ -70,6 +75,12 @@ function closeDetail() { showDetail.value = false }
       </scroll-view>
       <view v-else class="detail-empty">
         <text>暂无店铺详情</text>
+      </view>
+      <view v-if="shopData?.contact" class="detail-footer">
+        <view class="call-btn" @tap="callContact">
+          <text class="icon-phone call-icon"></text>
+          <text class="call-text">电话联系店主</text>
+        </view>
       </view>
     </view>
   </page-container>
@@ -244,5 +255,27 @@ function closeDetail() { showDetail.value = false }
   justify-content: center;
   color: #999;
   font-size: 28rpx;
+}
+.detail-footer {
+  padding: 16rpx 30rpx 30rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+.call-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  background: linear-gradient(135deg, #FF8833, #FFA751);
+  border-radius: 44rpx;
+  .call-icon {
+    font-size: 36rpx;
+    color: #FFF;
+    margin-right: 12rpx;
+  }
+  .call-text {
+    font-size: 30rpx;
+    color: #FFF;
+    font-weight: 600;
+  }
 }
 </style>

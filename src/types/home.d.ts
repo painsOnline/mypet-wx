@@ -27,6 +27,7 @@ export type ShopDetail = {
   name: string
   logo: string
   detail?: string
+  contact?: string
   freeShippingAmount: number
   banners: BannerItem[]
 }
