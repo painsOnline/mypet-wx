@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
-import { appendShopParam } from '@/utils/shop'
+import { appendShopParam, switchToShop } from '@/utils/shop'
 
 interface ShopValidateResult {
   valid: boolean
@@ -85,8 +85,8 @@ onLaunch(async () => {
     })
 
     if (res.confirm) {
-      // User chose to switch
-      uni.setStorageSync('shopCode', shopParam)
+      // User chose to switch — clear caches and set new shop
+      switchToShop(shopParam)
       console.log("Switched shop to:", shopParam)
     }
     // If user chose to stay, keep stored shop code
@@ -103,7 +103,7 @@ onLaunch(async () => {
   if (shopParam) {
     const valid = await validateShopCode(shopParam)
     if (valid.valid) {
-      uni.setStorageSync('shopCode', shopParam)
+      switchToShop(shopParam)
       console.log("Shop code from QR:", shopParam)
       return
     }

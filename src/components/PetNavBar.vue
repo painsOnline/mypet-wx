@@ -19,6 +19,9 @@ const currentPage = getCurrentPages().pop()?.route || ''
 const showDetail = ref(false)
 function openDetail() { showDetail.value = true }
 function closeDetail() { showDetail.value = false }
+function switchShop() {
+  uni.navigateTo({ url: '/pages/shop/shop' })
+}
 function callContact() {
   if (shopData.value?.contact) {
     uni.makePhoneCall({ phoneNumber: shopData.value.contact })
@@ -39,6 +42,7 @@ function callContact() {
         <view class="shop-tags">
           <text class="tag tag-delivery">小区业主急送</text>
           <text class="tag tag-quality">正品保障</text>
+          <text class="switch-shop" @tap.stop="switchShop">切换店铺</text>
         </view>
       </view>
     </view>
@@ -152,6 +156,20 @@ function callContact() {
         color: #FF7A2E;
         background: rgba(255,255,255,0.9);
         box-shadow: 0 2rpx 8rpx rgba(255,122,46,0.15);
+      }
+    }
+    .switch-shop {
+      margin-left: auto;
+      font-size: 20rpx;
+      font-weight: 600;
+      color: #FFF;
+      padding: 6rpx 0;
+      text-decoration: underline;
+      text-underline-offset: 4rpx;
+      white-space: nowrap;
+      &::after {
+        content: '>';
+        margin-left: 2rpx;
       }
     }
   }

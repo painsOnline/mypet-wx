@@ -14,7 +14,7 @@
           :key="item.id"
           class="item"
           :class="{ active: item.id === activeCategory }"
-          @tap="activeCategory = item.id"
+          @tap="onCategoryTap(item.id)"
         >
           <text class="name">
             {{ item.name }}
@@ -22,10 +22,9 @@
         </view>
       </scroll-view>
       <!-- 右侧：分类商品 -->
-      <scroll-view enable-back-to-top class="productList" scroll-y @scrolltolower="getCategoryProductsData">
+      <scroll-view enable-back-to-top class="productList" scroll-y @scrolltolower="loadMore">
         <view class="productListContent">
-          <!-- 分类商品列表区域 -->
-          <view class="panel" :key="activeCategory">
+          <view class="panel">
             <navigator
               v-for="product in productList"
               :key="product.id"
@@ -49,7 +48,7 @@
               </view>
             </navigator>
           </view>
-          <view class="loading-text" v-if="isFinish || isLoading">
+          <view class="loading-text" v-if="isLoading || (isFinish && productList.length)">
             {{ isFinish ? '没有更多了哟...' : '数据正在加载中...' }}
           </view>
         </view>
@@ -60,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { onLoad, onShow, onHide, onReady, onUnload } from '@dcloudio/uni-app'
 import type { CategoryItem } from '@/types/category'
 import type { ProductDetail } from '@/types/product'
@@ -69,86 +68,99 @@ import { SkuMode} from '@/enums/product'
 import { getCategoryListAPI, getProductsByCategoryIdAPI } from '@/services/category'
 import { getShopCode } from '@/utils/shop'
 
-// 获取分类列表数据
 const categoryList = ref<CategoryItem[]>([])
 const activeCategory = ref('')
-
-const getCategoryList = async () => {
-  const res = await getCategoryListAPI()
-  categoryList.value = res.result
-  if (!activeCategory.value && res.result.length > 0) {
-    activeCategory.value = res.result[0].id
-  }
-}
-
-// 获取商品列表
 const productList = ref<ProductDetail[]>([])
 const isLoading = ref(false)
 const isFinish = ref(false)
-const isTriggered = ref(false)
-
-// 分页参数
-const page = ref(1)
 const pageSize = 6
 
-//sku弹窗
+// 下滚游标
+const catId = ref('')
+const page = ref(1)
+
 const skuPopRef = ref()
 const shopCartRef = ref()
 
 const onOpenSkuPopup = (product: ProductDetail, popMod: SkuMode = SkuMode.Cart) => {
   skuPopRef.value.openSkuPopup(product, popMod)
 }
-
 const onAddToCart = (cartItem: any) => {
   shopCartRef.value?.addCart(cartItem)
 }
 
-const getCategoryProductsData = async () => {
+// 手动点击左侧分类
+const onCategoryTap = (catIdTapped: string) => {
+  activeCategory.value = catIdTapped
+  catId.value = catIdTapped
+  page.value = 1
+  productList.value = []
+  isFinish.value = false
+  loadMore()
+}
+
+const loadMore = async () => {
   if (isLoading.value) return
   if (isFinish.value) {
-    return uni.showToast({ icon: 'none', title: '没有更多数据~' })
+    uni.showToast({ icon: 'none', title: '没有更多数据~' })
+    return
   }
   isLoading.value = true
   const res = await getProductsByCategoryIdAPI({
-    id: activeCategory.value,
+    id: catId.value,
     page: page.value,
     pageSize,
   })
   isLoading.value = false
   productList.value = [...productList.value, ...res.result.items]
+
   if (page.value < res.result.pages) {
     page.value++
-  } else {
+    return
+  }
+  await advanceDown()
+}
+
+const advanceDown = async () => {
+  const idx = categoryList.value.findIndex(c => c.id === catId.value)
+  if (idx < 0 || idx >= categoryList.value.length - 1) {
     isFinish.value = true
+    return
+  }
+  activeCategory.value = categoryList.value[idx + 1].id
+  catId.value = activeCategory.value
+  page.value = 1
+
+  isLoading.value = true
+  const res = await getProductsByCategoryIdAPI({
+    id: catId.value,
+    page: 1,
+    pageSize,
+  })
+  isLoading.value = false
+  productList.value = [...productList.value, ...res.result.items]
+
+  if (page.value < res.result.pages) {
+    page.value = 2
+  } else {
+    await advanceDown()
   }
 }
 
-// 监听分类切换，重置并重新请求
-watch(
-  () => activeCategory.value,
-  () => {
-    page.value = 1
-    productList.value = []
-    isFinish.value = false
-    getCategoryProductsData()
-  },
-)
+const getCategoryList = async () => {
+  const res = await getCategoryListAPI()
+  categoryList.value = res.result
+  if (res.result.length > 0) {
+    const firstId = res.result[0].id
+    activeCategory.value = firstId
+    catId.value = firstId
+  }
+}
 
-// 页面加载
 onReady(async () => {
   await getCategoryList()
-  // getCategoryList 中会设置 activeCategory，watch 自动触发 getCategoryProductsData
+  if (activeCategory.value) loadMore()
 })
-
-// 自定义下拉刷新
-const onRefresherrefresh = async () => {
-  isTriggered.value = true
-  page.value = 1
-  productList.value = []
-  isFinish.value = false
-  await getCategoryProductsData()
-  isTriggered.value = false
-}
 
 onLoad(() => {})
 onShow(() => {})

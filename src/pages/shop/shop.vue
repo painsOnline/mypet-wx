@@ -35,7 +35,7 @@ import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { getShopList } from '@/services/shop'
 import type { ShopItem } from '@/services/shop'
-import { appendShopParam } from '@/utils/shop'
+import { appendShopParam, switchToShop } from '@/utils/shop'
 
 const shops = ref<ShopItem[]>([])
 const loading = ref(false)
@@ -53,16 +53,11 @@ async function loadShops() {
 }
 
 function selectShop(shop: ShopItem) {
-  uni.setStorageSync('shopCode', shop.code)
+  switchToShop(shop.code)
   uni.reLaunch({ url: appendShopParam('/pages/index/index') })
 }
 
 onShow(() => {
-  const storedShop = uni.getStorageSync('shopCode')
-  if (storedShop) {
-    uni.reLaunch({ url: appendShopParam('/pages/index/index') })
-    return
-  }
   loadShops()
 })
 </script>

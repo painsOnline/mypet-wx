@@ -18,14 +18,151 @@ const query = defineProps<{
 
 // 获取商品详情信息
 const product = ref<ProductDetail>()
+
+// 分享图临时路径
+const shareImagePath = ref('')
+
+// 生成分享图
+const generateShareImage = (): Promise<string> => {
+  return new Promise((resolve) => {
+    const prod = product.value
+    if (!prod) { resolve(''); return }
+    const W = 500
+    const H = 400
+    const query = uni.createSelectorQuery()
+    query.select('#shareCanvas').fields({ node: true, size: true }).exec((res) => {
+      if (!res[0]?.node) { resolve(''); return }
+      const canvas = res[0].node
+      const ctx = canvas.getContext('2d')
+      canvas.width = W
+      canvas.height = H
+      // 白色背景
+      ctx.fillStyle = '#FFFFFF'
+      ctx.fillRect(0, 0, W, H)
+      // 上半部分渐变色背景
+      const topGrad = ctx.createLinearGradient(0, 0, 0, 100)
+      topGrad.addColorStop(0, '#FFF8F0')
+      topGrad.addColorStop(1, '#FFFFFF')
+      ctx.fillStyle = topGrad
+      ctx.fillRect(0, 0, W, 140)
+      // 价格
+      ctx.fillStyle = '#E03131'
+      ctx.font = 'bold 42px sans-serif'
+      const priceText = `¥${prod.price}`
+      const priceW = ctx.measureText(priceText).width
+      ctx.fillText(priceText, 24, 72)
+      // 分隔线
+      ctx.fillStyle = '#ddd'
+      ctx.fillRect(24 + priceW + 16, 42, 2, 40)
+      // 标题
+      ctx.fillStyle = '#333'
+      ctx.font = '26px sans-serif'
+      const title = prod.name || '宠物用品'
+      const maxTitleW = W - 24 - priceW - 48 - 24
+      const chars = title.split('')
+      let line1 = ''
+      let line2 = ''
+      for (const ch of chars) {
+        if (ctx.measureText(line1 + ch).width < maxTitleW && line2 === '') {
+          line1 += ch
+        } else {
+          line2 += ch
+          if (ctx.measureText(line2 + '…').width >= maxTitleW) {
+            line2 = line2.slice(0, -1) + '…'
+            break
+          }
+        }
+      }
+      const titleX = 24 + priceW + 36
+      ctx.fillText(line1, titleX, 58)
+      if (line2) ctx.fillText(line2, titleX, 90)
+      // 卡片边框
+      const cardX = 16
+      const cardY = 120
+      const cardW = W - 32
+      const cardH = H - 136
+      ctx.fillStyle = '#FFFFFF'
+      ctx.strokeStyle = '#f0e8dc'
+      ctx.lineWidth = 3
+      ctx.beginPath()
+      ctx.roundRect(cardX, cardY, cardW, cardH, 12)
+      ctx.fill()
+      ctx.stroke()
+      // 阴影
+      ctx.shadowColor = 'rgba(0,0,0,0.06)'
+      ctx.shadowBlur = 16
+      ctx.shadowOffsetY = 4
+      ctx.stroke()
+      ctx.shadowColor = 'transparent'
+      ctx.shadowBlur = 0
+      // 横幅：邻居们都在抢
+      const bannerH = 48
+      const bannerGrad = ctx.createLinearGradient(0, cardY, 0, cardY + bannerH)
+      bannerGrad.addColorStop(0, '#FF8833')
+      bannerGrad.addColorStop(1, '#FFB366')
+      ctx.fillStyle = bannerGrad
+      ctx.beginPath()
+      ctx.roundRect(cardX, cardY, cardW, bannerH, [12, 12, 0, 0])
+      ctx.fill()
+      // 横幅文字
+      ctx.fillStyle = '#FFFFFF'
+      ctx.font = 'bold 22px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText('邻居们都在抢', W / 2, cardY + 30)
+      ctx.textAlign = 'left'
+      // 加载并绘制商品主图
+      const imgX = cardX + 10
+      const imgY = cardY + bannerH + 8
+      const imgW = cardW - 20
+      const imgH = cardH - bannerH - 16
+      const firstPic = prod.mainPictures?.[0]
+      if (firstPic) {
+        const img = canvas.createImage()
+        img.onload = () => {
+          const scale = Math.min(imgW / img.width, imgH / img.height)
+          const dw = img.width * scale
+          const dh = img.height * scale
+          const dx = imgX + (imgW - dw) / 2
+          const dy = imgY + (imgH - dh) / 2
+          ctx.fillStyle = '#fafafa'
+          ctx.fillRect(imgX, imgY, imgW, imgH)
+          ctx.drawImage(img, dx, dy, dw, dh)
+          canvas.toTempFilePath({
+            x: 0, y: 0, width: W, height: H,
+            destWidth: W * 2, destHeight: H * 2,
+            fileType: 'jpg', quality: 0.9,
+            success: (file) => resolve(file.tempFilePath),
+            fail: () => resolve(''),
+          })
+        }
+        img.onerror = () => resolve('')
+        img.src = firstPic
+      } else {
+        canvas.toTempFilePath({
+          x: 0, y: 0, width: W, height: H,
+          destWidth: W * 2, destHeight: H * 2,
+          fileType: 'jpg', quality: 0.9,
+          success: (file) => resolve(file.tempFilePath),
+          fail: () => resolve(''),
+        })
+      }
+    })
+  })
+}
+
 const getProductByIdData = async () => {
   const res = await getProductByIdAPI(query.id)
   product.value = res.result
+  // 数据加载后生成分享图
+  await nextTick()
+  generateShareImage().then((path) => {
+    shareImagePath.value = path
+  })
 }
 
 // 页面加载
 onLoad(async () => {
-  getProductByIdData()
+  await getProductByIdData()
   await nextTick()
   shopCartRef.value?.toggleVisible()
 })
@@ -91,16 +228,20 @@ const detailHtml = computed(() => {
 
 // 微信分享
 onShareAppMessage(() => {
+  const price = product.value?.price
+  const name = product.value?.name || '宠物用品'
   return {
-    title: product.value?.name || '宠物用品',
+    title: price ? `¥${price}|${name}` : name,
     path: `/pages/product/product?id=${query.id}&shop=${getShopCode()}`,
-    imageUrl: product.value?.mainPictures?.[0] || '',
+    imageUrl: shareImagePath.value || product.value?.mainPictures?.[0] || '',
   }
 })
 
 </script>
 
 <template>
+  <!-- 分享图生成画布（隐藏） -->
+  <canvas type="2d" id="shareCanvas" style="position:fixed;left:200vw;top:0;width:500px;height:400px" />
   <!-- SKU弹窗组件 -->
   <PetSkuPopup ref="skuPopRef" @add-to-cart="onAddToCart" />
   <scroll-view enable-back-to-top scroll-y class="viewport">
