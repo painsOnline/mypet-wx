@@ -314,6 +314,27 @@ page {
         color: #666;
         line-height: 1;
       }
+      .cart-icon-wrap {
+        position: relative;
+        display: inline-block;
+      }
+      .cart-badge {
+        position: absolute;
+        top: -8rpx;
+        right: -30rpx;
+        min-width: 32rpx;
+        height: 32rpx;
+        padding: 0 6rpx;
+        line-height: 32rpx;
+        text-align: center;
+        font-size: 20rpx;
+        font-weight: 600;
+        color: #fff;
+        background-color: #f01414;
+        border-radius: 10rpx;
+        box-shadow: 0 2rpx 6rpx rgba(240,20,20,0.3);
+        white-space: nowrap;
+      }
     }
   }
 }

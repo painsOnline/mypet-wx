@@ -6,6 +6,7 @@ import { getProductByIdAPI } from '@/services/product'
 import type { ProductDetail } from '@/types/product'
 import { SkuMode} from '@/enums/product'
 import { useShopStore } from '@/stores/modules/shop'
+import { useCartStore } from '@/stores'
 import { getShopCode } from '@/utils/shop'
 
 // 获取屏幕边界到安全区域距离
@@ -190,6 +191,15 @@ const onOpenSkuPopup = (product: ProductDetail, popMod: SkuMode = SkuMode.Both) 
   skuPopRef.value.openSkuPopup(product, popMod)
 }
 
+const cartStore = useCartStore()
+const cartCount = computed(() => {
+  let total = 0
+  for (const item of cartStore.getMemberLocalCart().values()) {
+    total += item.count || 0
+  }
+  return total
+})
+
 const onAddToCart = (cartItem: any) => {
   shopCartRef.value?.addCart(cartItem)
 }
@@ -324,8 +334,11 @@ onShareAppMessage(() => {
         <image class="btn-icon" src="/static/images/share.png" mode="aspectFit" />
         <text>分享</text>
       </button>
-      <view class="icons-button" @click="toggleCartVisible">
-        <image class="btn-icon" src="/static/images/cart.png" mode="aspectFit" />
+      <view class="icons-button cart-btn" @click="toggleCartVisible">
+        <view class="cart-icon-wrap">
+          <image class="btn-icon" src="/static/images/cart.png" mode="aspectFit" />
+          <text v-if="cartCount > 0" class="cart-badge">{{ cartCount > 99 ? '99+' : cartCount }}</text>
+        </view>
         <text>购物车</text>
       </view>
     </view>
