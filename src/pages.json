@@ -41,6 +41,7 @@
 		{
 			"path": "pages/product/product",
 			"style": {
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "商品详情",
 				"navigationBarTextStyle": "white"
 			}

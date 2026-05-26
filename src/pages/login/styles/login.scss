@@ -5,6 +5,7 @@ page {
 .viewport {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   height: 100%;
   padding: 20rpx 40rpx;
 }
@@ -22,7 +23,6 @@ page {
 .login {
   display: flex;
   flex-direction: column;
-  height: 60vh;
   padding: 40rpx 20rpx 20rpx;
 
   .input {

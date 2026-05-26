@@ -3,7 +3,8 @@ import { ref } from 'vue'
 import { useShopStore } from '@/stores/modules/shop'
 import { getShopCode } from '@/utils/shop'
 
-const { safeAreaInsets } = uni.getSystemInfoSync()
+const { safeAreaInsets, statusBarHeight } = uni.getSystemInfoSync()
+const topSafe = Math.max(safeAreaInsets?.top || 0, statusBarHeight || 0)
 const { shopData, fetchShop } = useShopStore()
 fetchShop()
 
@@ -30,7 +31,7 @@ function callContact() {
 </script>
 
 <template>
-  <view class="navbar" :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
+  <view class="navbar" :style="{ paddingTop: topSafe + 'px' }">
     <!-- Header: logo + info, click to open shop detail -->
     <view class="shop-header" @tap="openDetail">
       <view class="logo-wrap">

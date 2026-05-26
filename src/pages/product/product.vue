@@ -7,10 +7,11 @@ import type { ProductDetail } from '@/types/product'
 import { SkuMode} from '@/enums/product'
 import { useShopStore } from '@/stores/modules/shop'
 import { useCartStore } from '@/stores'
-import { getShopCode } from '@/utils/shop'
+import { getShopCode, appendShopParam } from '@/utils/shop'
 
 // 获取屏幕边界到安全区域距离
-const { safeAreaInsets } = uni.getSystemInfoSync()
+const { safeAreaInsets, statusBarHeight } = uni.getSystemInfoSync()
+const topSafe = Math.max(safeAreaInsets?.top || 0, statusBarHeight || 0)
 
 // 接收页面参数
 const query = defineProps<{
@@ -208,6 +209,7 @@ const toggleCartVisible = () => {
   shopCartRef.value?.toggleVisible()
 }
 
+
 const selectArrText = computed(() => {
   return skuPopRef.value?.selectArr?.join(' ').trim() || '请选择商品规格'
 })
@@ -236,6 +238,9 @@ const detailHtml = computed(() => {
   return `<div style="width:100%;overflow:hidden;word-break:break-all">${html}</div>`
 })
 
+const goBack = () => { uni.navigateBack() }
+const goHome = () => { uni.reLaunch({ url: appendShopParam('/pages/index/index') }) }
+
 // 微信分享
 onShareAppMessage(() => {
   const price = product.value?.price
@@ -254,7 +259,17 @@ onShareAppMessage(() => {
   <canvas type="2d" id="shareCanvas" style="position:fixed;left:200vw;top:0;width:500px;height:400px" />
   <!-- SKU弹窗组件 -->
   <PetSkuPopup ref="skuPopRef" @add-to-cart="onAddToCart" />
-  <scroll-view enable-back-to-top scroll-y class="viewport">
+  <view class="nav-bar" :style="{ paddingTop: topSafe + 'px' }">
+    <view class="nav-inner">
+      <view class="nav-back" @tap="goBack">
+        <text class="nav-arrow">‹</text>
+        <text class="nav-back-text">返回</text>
+      </view>
+      <text class="nav-sep">|</text>
+      <text class="nav-home-icon" @tap="goHome">&#x2302;</text>
+    </view>
+  </view>
+  <scroll-view enable-back-to-top scroll-y class="viewport" :style="{ paddingTop: (topSafe + 44) + 'px' }">
     <!-- 基本信息 -->
     <view class="goods">
       <!-- 商品主图 -->

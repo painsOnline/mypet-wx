@@ -1,13 +1,22 @@
 import { ref } from 'vue'
 import type { CartItem } from '@/types/cart'
 import { defineStore } from 'pinia'
+import { getMemberCartAPI, resetMemberCartAPI } from '@/services/cart'
 
 export const useCartStore = defineStore(
   "cart",
   () => {
     const cartMap = ref<Map<string, CartItem>>(new Map())
 
+    // Global init/sync state (shared across all component instances)
+    let _initDone = false
+    let _initPromise: Promise<void> | null = null
+    let _syncTimer: ReturnType<typeof setInterval> | null = null
+    // Monotonically increasing version to detect concurrent writes
+    let _version = 0
+
     const triggerReactivity = () => {
+      _version++
       cartMap.value = new Map(cartMap.value)
     }
 
@@ -46,8 +55,60 @@ export const useCartStore = defineStore(
 
     const resetMemberLocalCart = (cart: Map<string, CartItem>): boolean => {
       cartMap.value = new Map(cart)
-      triggerReactivity()
+      _version++
       return true
+    }
+
+    /**
+     * Idempotent init: merge DB cart into local, sync back. Runs only once.
+     */
+    const syncInit = (): Promise<void> => {
+      if (_initDone) return Promise.resolve()
+      if (_initPromise) return _initPromise
+      _initPromise = _doInit()
+      return _initPromise
+    }
+
+    const _doInit = async () => {
+      try {
+        const versionBefore = _version
+        const res = await getMemberCartAPI()
+        const dbItems = res.result || []
+        let changed = false
+        for (const item of dbItems) {
+          if (!cartMap.value.has(item.skuId)) {
+            cartMap.value.set(item.skuId, item)
+            changed = true
+          }
+        }
+        if (changed) triggerReactivity()
+        // Sync local state to backend
+        await resetMemberCartAPI([...cartMap.value.values()])
+      } catch (e) {
+        console.warn('[CartStore] initCart failed', e)
+      } finally {
+        _initDone = true
+        _initPromise = null
+      }
+    }
+
+    const startSync = () => {
+      if (_syncTimer) return
+      _syncTimer = setInterval(() => {
+        resetMemberCartAPI([...cartMap.value.values()]).catch(() => {})
+      }, 10000)
+    }
+
+    const stopSync = () => {
+      if (_syncTimer) {
+        clearInterval(_syncTimer)
+        _syncTimer = null
+      }
+      _initDone = false
+    }
+
+    const syncNow = () => {
+      return resetMemberCartAPI([...cartMap.value.values()]).catch(() => {})
     }
 
     return {
@@ -57,6 +118,10 @@ export const useCartStore = defineStore(
       clearMemberLocalCart,
       modifyMemberLocalCart,
       resetMemberLocalCart,
+      syncInit,
+      startSync,
+      stopSync,
+      syncNow,
     }
   },
   {

@@ -3,7 +3,7 @@
   <PetSkuPopup ref="skuPopRef" @add-to-cart="onAddToCart" />
   <view v-if="mounted" class="viewport">
     <!-- 自定义头部 -->
-    <view class="nav-header" :style="{ paddingTop: safeAreaInsets!.top + 'px' }">
+    <view class="nav-header" :style="{ paddingTop: topSafe + 'px' }">
       <view class="nav-bar">
         <view class="nav-back" @tap="goBack">
           <text class="back-arrow">‹</text>
@@ -65,8 +65,10 @@
               <view class="product-name">{{ product.name }}</view>
               <view class="product-desc">{{ product.desc }}</view>
               <view class="product-price-row">
-                <text class="now-price">¥{{ product.price }}</text>
-                <text class="old-price">¥{{ product.oldPrice }}</text>
+                <view class="product-price">
+                  <text class="now-price">优惠价￥{{ product.price }}</text>
+                  <text class="old-price">￥{{ product.oldPrice }}</text>
+                </view>
                 <view class="add-btn" @click.stop="onOpenSkuPopup(product)">
                   <image src="/static/tabs/add-now.png" />
                 </view>
@@ -91,7 +93,8 @@ import type { ProductDetail } from '@/types/product'
 import { getShopCode } from '@/utils/shop'
 
 const mounted = ref(false)
-const { safeAreaInsets } = uni.getSystemInfoSync()
+const { safeAreaInsets, statusBarHeight } = uni.getSystemInfoSync()
+const topSafe = Math.max(safeAreaInsets?.top || 0, statusBarHeight || 0)
 onMounted(() => { mounted.value = true })
 
 const keyword = ref('')
@@ -169,7 +172,7 @@ function goBack() { uni.navigateBack() }
   background: #f4f4f4;
 }
 .nav-header {
-  background: #fff;
+  background: #FF8833;
 }
 .nav-bar {
   display: flex;
@@ -184,22 +187,23 @@ function goBack() { uni.navigateBack() }
   display: flex;
   align-items: center;
   font-size: 28rpx;
-  color: #333;
+  color: #fff;
 }
 .back-arrow {
   font-size: 40rpx;
   line-height: 1;
   margin-right: 4rpx;
+  color: #fff;
 }
 .nav-title {
   font-size: 32rpx;
   font-weight: 600;
-  color: #333;
+  color: #fff;
 }
 .search-bar {
   display: flex;
   align-items: center;
-  padding: 10rpx 20rpx 16rpx;
+  padding: 16rpx 20rpx 20rpx;
   background: #fff;
   gap: 16rpx;
 }
@@ -207,23 +211,23 @@ function goBack() { uni.navigateBack() }
   flex: 1;
   display: flex;
   align-items: center;
-  height: 64rpx;
+  height: 80rpx;
   background: #f5f5f5;
-  border-radius: 32rpx;
-  padding: 0 20rpx;
+  border-radius: 40rpx;
+  padding: 0 24rpx;
 }
 .search-icon {
-  width: 28rpx;
-  height: 28rpx;
-  margin-right: 12rpx;
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 14rpx;
   border: 3rpx solid #999;
   border-radius: 50%;
   position: relative;
   &::after {
     content: '';
     position: absolute;
-    right: -4rpx;
-    bottom: -4rpx;
+    right: -5rpx;
+    bottom: -5rpx;
     width: 8rpx;
     height: 3rpx;
     background: #999;
@@ -231,9 +235,9 @@ function goBack() { uni.navigateBack() }
     transform: rotate(45deg);
   }
 }
-.search-input { flex: 1; font-size: 28rpx; }
-.clear-btn { font-size: 28rpx; color: #999; padding: 0 10rpx; }
-.cancel-btn { font-size: 28rpx; color: #333; }
+.search-input { flex: 1; font-size: 30rpx; }
+.clear-btn { font-size: 30rpx; color: rgba(255,255,255,0.7); padding: 0 12rpx; }
+.cancel-btn { font-size: 30rpx; color: #fff; }
 .history {
   padding: 30rpx;
 }
@@ -264,49 +268,58 @@ function goBack() { uni.navigateBack() }
   height: calc(100vh - 100rpx);
 }
 .product-list {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 20rpx 10rpx;
+  padding: 10rpx 20rpx;
 }
 .product-item {
-  width: calc(50% - 20rpx);
-  margin: 10rpx;
-  background: #fff;
-  border-radius: 12rpx;
-  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
 }
 .product-img {
-  width: 100%;
-  height: 340rpx;
+  width: 180rpx;
+  height: 180rpx;
+  margin-right: 20rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
 }
 .product-info {
-  padding: 16rpx;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .product-name {
   font-size: 28rpx;
   font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: #000;
+  word-break: break-all;
+  margin-bottom: 8rpx;
 }
 .product-desc {
-  font-size: 22rpx;
-  color: #999;
-  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #C8C8C8;
+  margin-bottom: 12rpx;
 }
 .product-price-row {
   display: flex;
   align-items: center;
-  margin-top: 12rpx;
+  justify-content: space-between;
 }
-.now-price { font-size: 28rpx; color: #E03131; font-weight: 600; }
-.old-price { font-size: 22rpx; color: #999; text-decoration: line-through; margin-left: 10rpx; flex: 1; }
+.product-price {
+  flex: 1;
+  min-width: 0;
+}
+.now-price { font-size: 28rpx; color: #FE3D2D; }
+.old-price { font-size: 24rpx; color: #6a7076; text-decoration: line-through; margin-left: 8rpx; }
 .add-btn {
   width: 44rpx;
   height: 44rpx;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   image {
     width: 36rpx;
     height: 36rpx;

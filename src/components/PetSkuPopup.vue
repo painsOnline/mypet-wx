@@ -62,6 +62,12 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
   const inStockSkus = skus.filter((v) => v.inventory > 0)
   console.log('[PetSkuPopup] skus count:', skus.length, 'inStockSkus:', inStockSkus.length)
 
+  // 所有SKU都无库存
+  if (inStockSkus.length === 0) {
+    uni.showToast({ icon: 'none', title: '该商品已售罄' })
+    return
+  }
+
   // 只有一个SKU → 根据模式决定是否弹窗（Both模式始终弹窗供详情页选择）
   if (inStockSkus.length === 1 && skus.length === 1 && btnMode !== SkuMode.Both) {
     const onlySku = inStockSkus[0]
@@ -77,7 +83,6 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
         specs: onlySku.specs,
       }
       emit('add-to-cart', cartItem)
-      uni.showToast({ title: '已加入购物车' })
     }
     return
   }
@@ -148,6 +153,15 @@ const onAddCart = (selectShop: any) => {
   console.log('[PetSkuPopup] onAddCart selectShop:', JSON.stringify(selectShop))
   const sku = currentProduct.value?.skus?.find((s: any) => s.id === selectShop._id)
   console.log('[PetSkuPopup] onAddCart found sku:', sku ? sku.id : 'NOT FOUND')
+
+  // 检查库存
+  const stock = sku?.inventory ?? 0
+  if (stock <= 0) {
+    uni.showToast({ icon: 'none', title: '该商品已售罄' })
+    isShowSku.value = false
+    return
+  }
+
   const oldPrice = sku?.oldPrice ?? selectShop.price / 100 * 1.1
 
   const cartItem: CartItem = {
@@ -158,7 +172,7 @@ const onAddCart = (selectShop: any) => {
     count: selectShop.buy_num || 1,
     price: +oldPrice.toFixed(2),
     nowPrice: +(selectShop.price / 100).toFixed(2),
-    stock: selectShop.stock || 100,
+    stock,
     selected: true,
     attrsText: selectShop.sku_name_arr?.join(' ') || '',
     isEffective: true,
@@ -166,7 +180,6 @@ const onAddCart = (selectShop: any) => {
   }
 
   emit('add-to-cart', cartItem)
-  uni.showToast({ title: '已加入购物车' })
   isShowSku.value = false
 }
 

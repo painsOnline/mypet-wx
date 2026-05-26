@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, watch, onUnmounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { CartItem } from '@/types/cart'
-import { getMemberCartAPI, resetMemberCartAPI } from '@/services/cart'
 import { useMemberStore, useCartStore } from '@/stores'
 import { useShopStore } from '@/stores/modules/shop'
 import { appendShopParam } from '@/utils/shop'
@@ -61,21 +60,12 @@ const accMul = (arg1: number, arg2: number): number => {
   return (Number(arg1.toString().replace('.', '')) * Number(arg2.toString().replace('.', ''))) / Math.pow(10, m)
 }
 
-// 从本地存储获取列表（手动管理，确保增删实时同步到视图）
-const productList = ref<CartItem[]>([])
+// 直接派生自 store，任何页面修改都会实时反映
+const productList = computed(() => {
+  if (!isLoggedIn.value) return []
+  return [...cartStore.getMemberLocalCart().values()]
+})
 
-const refreshList = () => {
-  if (!isLoggedIn.value) {
-    productList.value = []
-    return
-  }
-  productList.value = [...cartStore.getMemberLocalCart().values()]
-}
-
-// 根据 skuId 移除
-const removeFromList = (skuId: string) => {
-  productList.value = productList.value.filter((v) => v.skuId !== skuId)
-}
 
 const getSelection = computed(() => {
   return productList.value.filter((item) => item.selected)
@@ -97,59 +87,15 @@ const getAllDiscount = computed(() => {
   return (+getAllPrice.value - +getAllNowPrice.value).toFixed(2)
 })
 
-// 初始化购物车：合并本地与后端数据，以本地为准
-const initCart = async () => {
-  const res = await getMemberCartAPI()
-  const memberDbCart = new Map<string, CartItem>()
-  res.result?.forEach((item) => {
-    memberDbCart.set(item.skuId, item)
-  })
-  const localCart = cartStore.getMemberLocalCart()
-
-  console.log("memberDbCart")
-  console.log(memberDbCart)
-
-  console.log("localCart")
-  console.log(localCart)
-
-
-
-  // 后端有本地没有的，补充到本地
-  for (const [skuId, item] of memberDbCart.entries()) {
-    if (!localCart.has(skuId)) {
-      localCart.set(skuId, item)
-    }
-  }
-
-  // 以本地为准更新后端
-  await resetMemberCartAPI([...localCart.values()])
-  // 更新本地存储
-  cartStore.resetMemberLocalCart(localCart)
-  refreshList()
-}
-
-// 定时同步（仅登录态下生效）
-let syncTimer: ReturnType<typeof setInterval> | null = null
-
+// Use store-level init/sync (only runs once globally, no per-instance race)
 watch(isLoggedIn, (val) => {
   if (val) {
-    if (!syncTimer) {
-      syncTimer = setInterval(() => {
-        resetMemberCartAPI([...cartStore.getMemberLocalCart().values()])
-      }, 10000)
-      initCart()
-    }
+    cartStore.syncInit()
+    cartStore.startSync()
   } else {
-    if (syncTimer) {
-      clearInterval(syncTimer)
-      syncTimer = null
-    }
+    cartStore.stopSync()
   }
 }, { immediate: true })
-
-onUnmounted(() => {
-  if (syncTimer) clearInterval(syncTimer)
-})
 
 // 交互方法
 const toggleList = () => {
@@ -168,7 +114,7 @@ const buyList = async () => {
     uni.showToast({ icon: 'none', title: '请选择商品' })
     return
   }
-  await resetMemberCartAPI([...cartStore.getMemberLocalCart().values()])
+  await cartStore.syncNow()
   uni.navigateTo({ url: appendShopParam('/pagesOrder/create/create') })
 }
 
@@ -177,28 +123,30 @@ const addCart = (item: CartItem) => {
   if (existing) {
     const newCount = existing.count + 1
     if (newCount > existing.stock) {
-      uni.showToast({ title: '该宝贝不能购买超过库存数量奥~' })
+      uni.showToast({ icon: 'none', title: '该宝贝不能购买超过库存数量奥~' })
       return
     }
     existing.count = newCount
     cartStore.modifyMemberLocalCart(existing)
   } else {
+    if ((item.stock || 0) <= 0) {
+      uni.showToast({ icon: 'none', title: '该商品已售罄' })
+      return
+    }
     item.count = 1
     cartStore.modifyMemberLocalCart(item)
   }
-  refreshList()
+  uni.showToast({ title: '已加入购物车' })
 }
 
 const decreaseCart = (item: CartItem) => {
   const newCount = item.count - 1
   if (newCount < 1) {
     cartStore.rememoveFromMemberLocalCart(item)
-    removeFromList(item.skuId)
     return
   }
   item.count = newCount
   cartStore.modifyMemberLocalCart(item)
-  refreshList()
 }
 
 const inputCart = (item: CartItem) => {
@@ -208,16 +156,13 @@ const inputCart = (item: CartItem) => {
   }
   if (item.count < 1) {
     cartStore.rememoveFromMemberLocalCart(item)
-    removeFromList(item.skuId)
     return
   }
   cartStore.modifyMemberLocalCart(item)
-  refreshList()
 }
 
 const clearCart = () => {
   cartStore.clearMemberLocalCart()
-  refreshList()
 }
 
 defineExpose({ addCart, toggleVisible })
@@ -289,7 +234,7 @@ defineExpose({ addCart, toggleVisible })
         </view>
       </scroll-view>
     </view>
-    <view class="listMask" v-show="isLoggedIn && isShowList && productList.length" @click="onMaskClick" />
+    <view class="listMask" v-show="isLoggedIn && isShowList" @click="onMaskClick" />
     </Transition>
   </view>
 </template>
