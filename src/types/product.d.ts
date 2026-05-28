@@ -53,8 +53,8 @@ export type DetailsPropertyItem = {
 export type SkuItem = {
   /** sku id */
   id: string
-  /** sku 库存 */
-  inventory: number
+  /** sku 虚拟库存 */
+  virtualInventory: number
   /** sku 原价 */
   oldPrice: number
   /** sku 图片 */

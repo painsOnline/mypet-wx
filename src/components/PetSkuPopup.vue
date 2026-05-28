@@ -59,7 +59,7 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
   }
   currentProduct.value = selectedPrduct
   const skus = selectedPrduct.skus ?? []
-  const inStockSkus = skus.filter((v) => v.inventory > 0)
+  const inStockSkus = skus.filter((v) => v.virtualInventory > 0)
   console.log('[PetSkuPopup] skus count:', skus.length, 'inStockSkus:', inStockSkus.length)
 
   // 所有SKU都无库存
@@ -79,7 +79,7 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
         id: selectedPrduct.id, skuId: onlySku.id, name: selectedPrduct.name,
         picture: onlySku.picture || selectedPrduct.mainPictures?.[0] || selectedPrduct.picture,
         count: 1, price: onlySku.oldPrice, nowPrice: onlySku.price,
-        stock: onlySku.inventory, selected: true, attrsText: specNames, isEffective: true,
+        stock: onlySku.virtualInventory, selected: true, attrsText: specNames, isEffective: true,
         specs: onlySku.specs,
       }
       emit('add-to-cart', cartItem)
@@ -130,7 +130,7 @@ const openSkuPopup = (selectedPrduct: ProductDetail, btnMode: SkuMode = SkuMode.
         goods_name: selectedPrduct.name,
         image: v.picture,
         price: v.price * 100,
-        stock: v.inventory,
+        stock: v.virtualInventory,
         sku_name_arr: skuNameArr,
       }
     }),
@@ -155,7 +155,7 @@ const onAddCart = (selectShop: any) => {
   console.log('[PetSkuPopup] onAddCart found sku:', sku ? sku.id : 'NOT FOUND')
 
   // 检查库存
-  const stock = sku?.inventory ?? 0
+  const stock = sku?.virtualInventory ?? 0
   if (stock <= 0) {
     uni.showToast({ icon: 'none', title: '该商品已售罄' })
     isShowSku.value = false
