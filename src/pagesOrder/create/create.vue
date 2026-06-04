@@ -7,9 +7,13 @@ import {
 import { useAddressStore } from '@/stores/modules/address'
 import { useCartStore } from '@/stores'
 import type { OrderPreResult } from '@/types/order'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
+import { shareAppMsg, shareTimeline } from '@/utils/useGlobalShare'
 import { computed, ref } from 'vue'
 import { appendShopParam, getShopCode } from '@/utils/shop'
+
+onShareAppMessage(() => shareAppMsg())
+onShareTimeline(() => shareTimeline())
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()

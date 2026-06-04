@@ -2,9 +2,14 @@
 import { deleteMemberAddressByIdAPI, getMemberAddressAPI } from '@/services/address'
 import { useAddressStore } from '@/stores/modules/address'
 import type { AddressItem } from '@/types/address'
-import { onShow } from '@dcloudio/uni-app'
+import { onShow , onShareAppMessage, onShareTimeline} from '@dcloudio/uni-app'
+import { shareAppMsg, shareTimeline } from '@/utils/useGlobalShare'
 import { ref } from 'vue'
 import { getShopCode } from '@/utils/shop'
+
+onShareAppMessage(() => shareAppMsg())
+onShareTimeline(() => shareTimeline())
+
 
 // 获取收货地址列表数据
 const addressList = ref<AddressItem[]>([])

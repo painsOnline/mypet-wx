@@ -86,11 +86,17 @@
 </template>
 
 <script setup lang="ts">
+import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
+import { shareAppMsg, shareTimeline } from '@/utils/useGlobalShare'
 import { ref, computed, onMounted } from 'vue'
 import { SkuMode } from '@/enums/product'
 import { getSearchAPI } from '@/services/search'
 import type { ProductDetail } from '@/types/product'
 import { getShopCode } from '@/utils/shop'
+
+onShareAppMessage(() => shareAppMsg())
+onShareTimeline(() => shareTimeline())
+
 
 const mounted = ref(false)
 const { safeAreaInsets, statusBarHeight } = uni.getSystemInfoSync()

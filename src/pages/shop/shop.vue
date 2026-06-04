@@ -32,10 +32,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { onShow } from '@dcloudio/uni-app'
+import { onShow , onShareAppMessage, onShareTimeline} from '@dcloudio/uni-app'
+import { shareAppMsg, shareTimeline } from '@/utils/useGlobalShare'
 import { getShopList } from '@/services/shop'
 import type { ShopItem } from '@/services/shop'
 import { appendShopParam, switchToShop } from '@/utils/shop'
+
+onShareAppMessage(() => shareAppMsg())
+onShareTimeline(() => shareTimeline())
+
 
 const shops = ref<ShopItem[]>([])
 const loading = ref(false)

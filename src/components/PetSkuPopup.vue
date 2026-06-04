@@ -17,7 +17,6 @@
     }"
     @add-cart="onAddCart"
     @buy-now="onBuyNow"
-    @open="openSkuPopup"
     @close="onCloseSkuPopup"
   />
 </template>

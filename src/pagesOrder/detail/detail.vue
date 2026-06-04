@@ -135,9 +135,13 @@ import {
   putMemberOrderReceiptByNoAPI,
 } from '@/services/order'
 import type { OrderDetail } from '@/types/order'
-import { onLoad, onReady } from '@dcloudio/uni-app'
+import { onLoad, onReady, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
+import { shareAppMsg, shareTimeline } from '@/utils/useGlobalShare'
 import { ref } from 'vue'
 import { getShopCode } from '@/utils/shop'
+
+onShareAppMessage(() => shareAppMsg())
+onShareTimeline(() => shareTimeline())
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()

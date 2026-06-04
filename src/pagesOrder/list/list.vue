@@ -1,6 +1,12 @@
 <script setup lang="ts">
+import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
+import { shareAppMsg, shareTimeline } from '@/utils/useGlobalShare'
 import { ref } from 'vue'
 import OrderList from './component/OrderList.vue'
+
+onShareAppMessage(() => shareAppMsg())
+onShareTimeline(() => shareTimeline())
+
 
 // 获取页面参数
 const query = defineProps<{

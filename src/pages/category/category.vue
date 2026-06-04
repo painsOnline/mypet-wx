@@ -60,13 +60,18 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { onLoad, onShow, onHide, onReady, onUnload } from '@dcloudio/uni-app'
+import { onLoad, onShow, onHide, onReady, onUnload , onShareAppMessage, onShareTimeline} from '@dcloudio/uni-app'
+import { shareAppMsg, shareTimeline } from '@/utils/useGlobalShare'
 import type { CategoryItem } from '@/types/category'
 import type { ProductDetail } from '@/types/product'
 import PetNavBar from '@/components/PetNavBar.vue';
 import { SkuMode} from '@/enums/product'
 import { getCategoryListAPI, getProductsByCategoryIdAPI } from '@/services/category'
 import { getShopCode } from '@/utils/shop'
+
+onShareAppMessage(() => shareAppMsg())
+onShareTimeline(() => shareTimeline())
+
 
 const categoryList = ref<CategoryItem[]>([])
 const activeCategory = ref('')

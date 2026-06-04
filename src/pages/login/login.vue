@@ -2,8 +2,13 @@
 import { postLoginWxMinQuickAPI } from '@/services/login'
 import { useMemberStore } from '@/stores'
 import type { LoginResult } from '@/types/member'
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad , onShareAppMessage, onShareTimeline} from '@dcloudio/uni-app'
+import { shareAppMsg, shareTimeline } from '@/utils/useGlobalShare'
 import { ref } from 'vue'
+
+onShareAppMessage(() => shareAppMsg())
+onShareTimeline(() => shareTimeline())
+
 
 const loading = ref(false)
 

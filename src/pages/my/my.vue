@@ -93,10 +93,15 @@
 </template>
 
 <script setup lang="ts">
-import { onShow } from '@dcloudio/uni-app'
+import { onShow , onShareAppMessage, onShareTimeline} from '@dcloudio/uni-app'
+import { shareAppMsg, shareTimeline } from '@/utils/useGlobalShare'
 import PetNavBar from '@/components/PetNavBar.vue';
 import { useMemberStore } from '@/stores'
 import { appendShopParam, getShopCode } from '@/utils/shop'
+
+onShareAppMessage(() => shareAppMsg())
+onShareTimeline(() => shareTimeline())
+
 
 onShow(() => {
   const memberStore = useMemberStore()

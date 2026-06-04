@@ -23,7 +23,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad , onShareAppMessage, onShareTimeline} from '@dcloudio/uni-app'
+import { shareAppMsg, shareTimeline } from '@/utils/useGlobalShare'
 import MySwiper from './components/MySwiper.vue';
 import type { BannerItem, HotItem } from '@/types/home';
 import HotPannel from './components/HotPannel.vue';
@@ -31,6 +32,9 @@ import PetNavBar from '@/components/PetNavBar.vue';
 import PetShopCart from '@/components/PetShopCart.vue';
 import { getHomeHotAPI } from '@/services/home'
 import { useShopStore } from '@/stores/modules/shop'
+
+onShareAppMessage(() => shareAppMsg())
+onShareTimeline(() => shareTimeline())
 
 const { windowHeight } = uni.getSystemInfoSync()
 const scrollHeight = windowHeight - 44 - 210 + 'px'
