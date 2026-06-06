@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
-import { onLoad, onShareAppMessage } from '@dcloudio/uni-app'
+import { onLoad, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
 import PetSkuPopup from '@/components/PetSkuPopup.vue'
 import { getProductByIdAPI } from '@/services/product'
 import type { ProductDetail } from '@/types/product'
@@ -252,6 +252,16 @@ onShareAppMessage(() => {
   }
 })
 
+onShareTimeline(() => {
+  const price = product.value?.price
+  const name = product.value?.name || '宠物用品'
+  return {
+    title: price ? `¥${price} | ${name}` : name,
+    query: `id=${query.id}&shop=${getShopCode()}`,
+    imageUrl: shareImagePath.value || product.value?.mainPictures?.[0] || '',
+  }
+})
+
 </script>
 
 <template>
@@ -266,7 +276,7 @@ onShareAppMessage(() => {
         <text class="nav-back-text">返回</text>
       </view>
       <text class="nav-sep">|</text>
-      <text class="nav-home-icon" @tap="goHome">&#x2302;</text>
+      <text class="nav-home-text" @tap="goHome">首页</text>
     </view>
   </view>
   <scroll-view enable-back-to-top scroll-y class="viewport" :style="{ paddingTop: (topSafe + 44) + 'px' }">

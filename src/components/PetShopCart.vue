@@ -27,7 +27,7 @@ const freeShippingText = computed(() => `满${freeShippingAmount.value}元免配
 
 // 是否满足免配送门槛
 const meetFreeShipping = computed(() => {
-  return Number(getAllPrice.value) >= freeShippingAmount.value
+  return Number(getAllNowPrice.value) >= freeShippingAmount.value
 })
 
 // 购物车展示

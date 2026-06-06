@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import type { ShopDetail } from '@/types/home'
 import { getShopDetailAPI } from '@/services/home'
 
-const SHOP_CACHE_EXPIRY = 24 * 60 * 60 * 1000
+const SHOP_CACHE_EXPIRY = 2 * 60 * 60 * 1000
 
 const shopData = ref<ShopDetail | null>(null)
 let lastShopCode = ''

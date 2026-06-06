@@ -87,7 +87,7 @@
         <template v-if="order.orderState === OrderState.ToDeliver">
           <view
             class="button delete"
-            @tap="onOrderCancel"
+            @tap="popup?.open()"
           >
             取消订单
           </view>
@@ -111,15 +111,11 @@
     <view class="popup-root">
       <view class="title">订单取消</view>
       <view class="description">
-        <view class="tips">请选择取消订单的原因：</view>
-        <view class="cell" v-for="item in reasonList" :key="item" @tap="reason = item">
-          <text class="text">{{ item }}</text>
-          <text class="icon" :class="{ checked: item === reason }"></text>
-        </view>
+        <view class="tips">确定要取消该订单吗？</view>
       </view>
       <view class="footer">
         <view class="button" @tap="popup?.close?.()">取消</view>
-        <view class="button primary" @tap="onOrderCancel">确认</view>
+        <view class="button primary" @tap="onOrderCancel">狠心取消</view>
       </view>
     </view>
   </uni-popup>
@@ -147,17 +143,6 @@ onShareTimeline(() => shareTimeline())
 const { safeAreaInsets } = uni.getSystemInfoSync()
 // 弹出层组件
 const popup = ref<UniHelper.UniPopupInstance>()
-// 取消原因列表
-const reasonList = ref([
-  '商品无货',
-  '不想要了',
-  '商品信息填错了',
-  '地址信息填写错误',
-  '商品降价',
-  '其它',
-])
-// 订单取消原因
-const reason = ref('')
 // 复制内容
 const onCopy = (id: string) => {
   // 设置系统剪贴板的内容
@@ -215,14 +200,13 @@ const onOrderConfirm = () => {
 
 // 取消订单
 const onOrderCancel = async () => {
-  // 发送请求
-  const res = await cancelMemberOrderByNoAPI(query.orderNo, { cancelReason: reason.value })
-  // 更新订单信息
+  const res = await cancelMemberOrderByNoAPI(query.orderNo, { cancelReason: '用户取消' })
   order.value = res.result
-  // 关闭弹窗
   popup.value?.close!()
-  // 轻提示
   uni.showToast({ icon: 'none', title: '订单取消成功' })
+  setTimeout(() => {
+    uni.redirectTo({ url: '/pagesOrder/list/list?type=0' })
+  }, 800)
 }
 </script>
 

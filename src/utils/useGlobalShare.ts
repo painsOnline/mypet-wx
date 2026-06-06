@@ -8,7 +8,7 @@
  *   onShareAppMessage(() => shareAppMsg())
  *   onShareTimeline(() => shareTimeline())
  */
-const SHARE_TITLE = '鑫钱猫宠物用品-主粮|零食|日用品|应急用药-免配送费-半小时达'
+const SHARE_TITLE = '鑫钱猫宠物用品-主粮|零食|日用|药品-货到付款-免配送费'
 
 export function shareAppMsg() {
   const shopCode = uni.getStorageSync('shopCode') || ''

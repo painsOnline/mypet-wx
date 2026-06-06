@@ -41,8 +41,9 @@ function callContact() {
       <view class="shop-info">
         <text class="shop-name">{{ shopData?.name || '宠物用品' }}</text>
         <view class="shop-tags">
-          <text class="tag tag-delivery">小区业主急送</text>
-          <text class="tag tag-quality">正品保障</text>
+          <text class="tag tag-genuine">货到付款</text>
+          <text class="tag tag-cod">正品保障</text>
+          <text class="tag tag-express">半小时达</text>
           <text class="switch-shop" @tap.stop="switchShop">切换店铺</text>
         </view>
       </view>
@@ -157,6 +158,20 @@ function callContact() {
         color: #FF7A2E;
         background: rgba(255,255,255,0.9);
         box-shadow: 0 2rpx 8rpx rgba(255,122,46,0.15);
+      }
+      &.tag-cod {
+        color: #FFF;
+        background: rgba(255,255,255,0.25);
+      }
+      &.tag-genuine {
+        color: #FF7A2E;
+        background: rgba(255,255,255,0.9);
+        box-shadow: 0 2rpx 8rpx rgba(255,122,46,0.15);
+      }
+      &.tag-express {
+        color: #E0550A;
+        background: rgba(255,255,255,0.82);
+        box-shadow: 0 2rpx 8rpx rgba(224,85,10,0.18);
       }
     }
     .switch-shop {
