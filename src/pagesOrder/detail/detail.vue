@@ -29,7 +29,7 @@
             :url="`/pages/goods/goods?id=${item.productId}&shop=${getShopCode()}`"
             hover-class="none"
           >
-            <image class="cover" :src="item.picture"></image>
+            <image class="cover" :src="item.picture" />
             <view class="meta">
               <view class="name ellipsis">{{ item.name }}</view>
               <view class="type">{{ item.attrsText }}</view>

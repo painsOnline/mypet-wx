@@ -286,7 +286,7 @@ onShareTimeline(() => {
       <view class="preview">
         <swiper @change="onChange" circular>
           <swiper-item v-for="item in product?.mainPictures" :key="item">
-            <image class="image" @tap="onTapImage" mode="aspectFill" :src="item" />
+            <image class="image" :src="item" mode="aspectFill" @click="onTapImage" />
           </swiper-item>
         </swiper>
         <view class="indicator">
@@ -339,9 +339,9 @@ onShareTimeline(() => {
           class="image"
           v-for="item in product?.details.pictures"
           :key="item"
-          mode="widthFix"
           :src="item"
-        ></image>
+          mode="widthFix"
+        />
         <!-- 商品详情HTML -->
         <rich-text
           v-if="detailHtml"

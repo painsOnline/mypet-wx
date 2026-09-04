@@ -5,7 +5,7 @@
       <text class="shop-subtitle">请选择您要进入的店铺</text>
     </view>
     <view class="shop-list">
-      <image class="shop-bg" src="/static/images/shop_bg.jpg" mode="widthFix" />
+      <image class="shop-bg" src="/static/images/shop_bg.jpg" imgMode="widthFix" />
       <view class="shop-list-inner">
         <view
           v-for="shop in shops"
@@ -13,7 +13,7 @@
           class="shop-item"
           @tap="selectShop(shop)"
         >
-          <image :src="shop.logo || '/static/images/shop_icon.png'" class="shop-logo" mode="aspectFill" />
+          <image class="shop-logo" :src="shop.logo || '/static/images/shop_icon.png'" mode="aspectFill" />
           <view class="shop-info">
             <text class="shop-name">{{ shop.name }}</text>
           </view>
