@@ -160,7 +160,7 @@ const onRefresherrefresh = async () => {
         hover-class="none"
       >
         <view class="cover">
-          <image class="image" :src="item.picture" mode="aspectFit" />
+          <image class="image" mode="aspectFit" :src="item.picture"></image>
         </view>
         <view class="meta">
           <view class="name ellipsis">{{ item.name }}</view>

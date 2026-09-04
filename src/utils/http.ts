@@ -69,6 +69,7 @@ export const http = <T>(options: UniApp.RequestOptions) => {
         } else if (res.statusCode === 401) {
           const memberStore = useMemberStore()
           memberStore.clearProfile()
+          uni.navigateTo({ url: appendShopParam('/pages/login/login') })
           reject(res)
         } else {
           const msg = (res.data as DataResult<T>).msg || ''

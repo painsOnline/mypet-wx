@@ -11,8 +11,6 @@ node_modules
 .DS_Store
 dist
 *.local
-unpackage/
-.hbuilderx/
 
 # Editor directories and files
 .idea

@@ -41,7 +41,7 @@ defineProps<{
         hover-class="none"
         :url="`/pages/product/product?id=${product.id}&shop=${getShopCode()}`"
       >
-        <image class="image" :src="product.picture" />
+        <image class="image" :src="product.picture"></image>
         <view class="name ellipsis">{{ product.name }}</view>
         <view class="price">
           优惠价

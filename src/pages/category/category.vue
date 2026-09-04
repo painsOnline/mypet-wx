@@ -32,7 +32,7 @@
               hover-class="none"
               :url="`/pages/product/product?id=${product.id}&shop=${getShopCode()}`"
             >
-              <image class="productImg" :src="product.picture" />
+              <image class="productImg" :src="product.picture"></image>
               <view class="productInfo">
                 <view class="productName">{{product.name}}</view>
                 <view class="productAttr">{{ product.desc }}</view>

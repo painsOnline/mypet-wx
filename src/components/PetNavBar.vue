@@ -41,9 +41,9 @@ function callContact() {
       <view class="shop-info">
         <text class="shop-name">{{ shopData?.name || '宠物用品' }}</text>
         <view class="shop-tags">
-          <text class="tag tag-genuine">验妥再付</text>
-          <text class="tag tag-cod">零费退换</text>
-          <text class="tag tag-express">顷刻送达</text>
+          <text class="tag tag-genuine">货到付款</text>
+          <text class="tag tag-cod">正品保障</text>
+          <text class="tag tag-express">半小时达</text>
           <text class="switch-shop" @tap.stop="switchShop">切换店铺</text>
         </view>
       </view>

@@ -42,16 +42,15 @@ const loginSuccess = (profile: LoginResult) => {
 
 <template>
   <view class="viewport">
-    <image class="login-bg" src="/static/images/shop_bg.jpg" mode="aspectFill" />
     <view class="login">
       <view class="button-privacy-wrap">
         <button
           class="button phone"
-          :disabled="loading"
+          :loading="loading"
           @click="quickLogin"
         >
           <text class="icon icon-phone"></text>
-          {{ loading ? '登录中...' : '快速登录' }}
+          快速登录
         </button>
       </view>
     </view>
